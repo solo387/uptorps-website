@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Question Bank</title>
+    <link rel="stylesheet" href="/static/css/admin.css" />
+    <script src="/static/js/admin.js" defer></script>
+    <script>
+      (function () {
+        const role = localStorage.getItem('uptorps_role');
+        const loggedIn = localStorage.getItem('uptorps_logged_in') === 'true';
+        if (!loggedIn || role !== 'admin') {
+          window.location.href = '/login.html?portal=admin';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-mark">◈</div>
+          <div class="brand-name">
+            <span>Uptorps</span>
+            <span class="brand-small">Management Portal</span>
+          </div>
+        </div>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Overview</button>
+          <a class="nav-item" href="/admin-dashboard.html"><span class="icon">▣</span>Dashboard</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Learning</button>
+          <a class="nav-item" href="/admin-learning.html"><span class="icon">▤</span>Learning Management</a>
+          <a class="nav-item" href="/admin-quizzes.html"><span class="icon">≋</span>Quizzes</a>
+          <a class="nav-item active" href="/admin-question-bank.html"><span class="icon">▣</span>Question Bank</a>
+          <a class="nav-item" href="/admin-grading.html"><span class="icon">✓</span>Grading</a>
+          <a class="nav-item" href="/admin-results.html"><span class="icon">▤</span>Results</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">People</button>
+          <a class="nav-item" href="#"><span class="icon">◌</span>Students</a>
+          <a class="nav-item" href="#"><span class="icon">◍</span>Users</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Administration</button>
+          <a class="nav-item" href="#"><span class="icon">◐</span>Admin & Staff Accounts</a>
+          <a class="nav-item" href="#"><span class="icon">＋</span>Create Account</a>
+          <a class="nav-item" href="#"><span class="icon">◔</span>Account Activity</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Commerce</button>
+          <a class="nav-item" href="#"><span class="icon">◫</span>Payments</a>
+          <a class="nav-item" href="#"><span class="icon">✦</span>Premium</a>
+          <a class="nav-item" href="#"><span class="icon">◧</span>Wallet</a>
+          <a class="nav-item" href="#"><span class="icon">⟲</span>Referral</a>
+        </nav>
+
+        <div class="sidebar-footer">Authorization is enforced by the backend.</div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="role-select">Admin · Manager ▾</div>
+          <div class="user-badge">
+            <span class="user-avatar">AB</span>
+            <span>ama.boaten@uptorps.com</span>
+            <span>AB</span>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="page-header">
+            <h1>Question Bank</h1>
+            <p>Every question authored across quizzes. Questions are edited inside their quiz.</p>
+          </div>
+
+          <div class="card-grid">
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">True / False</div>
+                <span class="icon-box soft">⇄</span>
+              </div>
+              <div class="stat-value">32</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Multiple Choice</div>
+                <span class="icon-box soft">◌</span>
+              </div>
+              <div class="stat-value">48</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Short Answer</div>
+                <span class="icon-box soft">✎</span>
+              </div>
+              <div class="stat-value">15</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Theory</div>
+                <span class="icon-box soft">▣</span>
+              </div>
+              <div class="stat-value">10</div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top: 24px;">
+            <div class="filters">
+              <input class="input" type="text" data-search placeholder="Search question or quiz" />
+              <select class="select"><option>All question types</option></select>
+              <select class="select"><option>All courses</option></select>
+            </div>
+
+            <div class="table-wrap" style="margin-top: 20px;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Question</th>
+                    <th>Type</th>
+                    <th>Quiz</th>
+                    <th>Course</th>
+                    <th>Marks</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-row>
+                    <td>Statement 1: mitochondria generate ATP for the cell.</td>
+                    <td><span class="badge info">TRUE FALSE</span></td>
+                    <td>Cell Biology Fundamentals</td>
+                    <td>Biology</td>
+                    <td>1</td>
+                    <td><button class="btn small">Open quiz</button></td>
+                  </tr>
+                  <tr data-row>
+                    <td>Statement 2: mitochondria generate ATP for the cell.</td>
+                    <td><span class="badge info">TRUE FALSE</span></td>
+                    <td>Cell Biology Fundamentals</td>
+                    <td>Biology</td>
+                    <td>1</td>
+                    <td><button class="btn small">Open quiz</button></td>
+                  </tr>
+                  <tr data-row>
+                    <td>Statement 3: mitochondria generate ATP for the cell.</td>
+                    <td><span class="badge info">TRUE FALSE</span></td>
+                    <td>Cell Biology Fundamentals</td>
+                    <td>Biology</td>
+                    <td>1</td>
+                    <td><button class="btn small">Open quiz</button></td>
+                  </tr>
+                  <tr data-row>
+                    <td>Statement 4: mitochondria generate ATP for the cell.</td>
+                    <td><span class="badge info">TRUE FALSE</span></td>
+                    <td>Cell Biology Fundamentals</td>
+                    <td>Biology</td>
+                    <td>1</td>
+                    <td><button class="btn small">Open quiz</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,93 @@
+x-django-env: &django-env
+  CELERY_BROKER_URL: redis://redis:6379/0
+  CELERY_RESULT_BACKEND: redis://redis:6379/0
+
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+    volumes:
+      - redis_data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: ./
+    restart: unless-stopped
+
+    env_file:
+      - ./.env_backend
+      - ./.env_web
+
+    environment:
+      <<: *django-env
+
+    depends_on:
+      redis:
+        condition: service_healthy
+
+    expose:
+      - "8000"
+
+  worker:
+    build: ./
+    restart: unless-stopped
+
+    command: celery -A core worker --loglevel=info
+
+    env_file:
+      - ./.env_backend
+      - ./.env_worker
+
+    environment:
+      <<: *django-env
+
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  beat:
+    build: ./
+    restart: unless-stopped
+
+    command: celery -A core beat --loglevel=info
+
+    env_file:
+      - ./.env_backend
+      - ./.env_worker
+
+    environment:
+      <<: *django-env
+
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+
+    env_file:
+      - ./.env
+
+    ports:
+      - "80:80"
+      - "443:443"
+
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+
+    depends_on:
+      - web
+
+volumes:
+  redis_data:
+  caddy_data:
+  caddy_config:

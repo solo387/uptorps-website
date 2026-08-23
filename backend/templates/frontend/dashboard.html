@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - UPTORPS</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="dashboard">
+    <div class="dashboard">
+        <nav class="dashboard-nav">
+            <div class="dashboard-nav-left">
+                <div class="logo">
+                    <div class="logo-icon">🎓</div>
+                    <span>UPTORPS</span>
+                </div>
+            </div>
+            <div class="dashboard-nav-right">
+                <span class="user-email" id="user-email">student@uptorps.com</span>
+                <a href="/admin-dashboard.html" class="portal-link">Admin portal</a>
+                <a href="/login.html" class="logout-btn" data-action="logout">→ Sign out</a>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="welcome-card">
+                <div class="welcome-header">
+                    <div>
+                        <p class="welcome-text">Welcome back,</p>
+                        <h1 class="user-greeting" id="user-greeting">Learner 👋</h1>
+                    </div>
+                </div>
+                <div class="user-badges">
+                    <span class="badge badge-role">Role: STUDENT</span>
+                    <span class="badge badge-status">Status: ACTIVE</span>
+                    <span class="badge badge-member">Member since 8/2/2026</span>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Courses in progress</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-number">72%</div>
+                    <div class="stat-label">Assessment average</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-number">1</div>
+                    <div class="stat-label">Certificates earned</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-number">GHS 0.00</div>
+                    <div class="stat-label">Wallet balance</div>
+                </div>
+            </div>
+
+            <div class="continue-learning-section">
+                <div class="section-header">
+                    <h2>Continue learning</h2>
+                    <div class="section-tabs">
+                        <button class="tab-btn active">🎯 Quizzes</button>
+                        <a href="/referral.html" class="tab-btn">Referral &amp; wallet</a>
+                        <button class="tab-btn">Quiz framework preview</button>
+                        <button class="tab-btn">Browse programmes →</button>
+                    </div>
+                </div>
+
+                <div class="courses-list">
+                    <div class="course-item">
+                        <div class="course-info">
+                            <h3 class="course-name">Software Engineering</h3>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-percentage">65%</div>
+                    </div>
+
+                    <div class="course-item">
+                        <div class="course-info">
+                            <h3 class="course-name">Data &amp; Analytics</h3>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 40%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="progress-percentage">40%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      (function () {
+        const role = localStorage.getItem('uptorps_role');
+        const loggedIn = localStorage.getItem('uptorps_logged_in') === 'true';
+        if (!loggedIn || role !== 'student') {
+          window.location.href = '/login.html?portal=student';
+        }
+      })();
+    </script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

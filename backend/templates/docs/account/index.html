@@ -1,0 +1,1274 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts API Documentation - Uptorps</title>
+    <link rel="stylesheet" href="{% static 'docs/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="top-nav-content">
+                <a href="#" class="logo">
+                    <span>📚</span>
+                    <span>Uptorps API</span>
+                </a>
+                <div class="app-links">
+                    <a href="{%url 'auth_docs' %}" class="active">Accounts</a>
+                    <a href="{% url 'quiz_docs' %}" >Quizzes</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Sidebar Navigation -->
+            <aside class="sidebar">
+                <nav class="sidebar-nav">
+                    <div class="sidebar-nav-header">📋 Endpoints</div>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#authentication">Authentication</a></li>
+                        <li><a href="#registration">User Registration</a></li>
+                        <li><a href="#email-verification">Email Verification</a></li>
+                        <li><a href="#email-resend">Resend Verification</a></li>
+                        <li><a href="#login">Login</a></li>
+                        <li><a href="#token-refresh">Token Refresh</a></li>
+                        <li><a href="#admin-creation">Create Admin</a></li>
+                        <li><a href="#user-deletion">Delete User</a></li>
+                        <li><a href="#password-reset">Password Reset</a></li>
+                        <li><a href="#password-confirm">Password Reset Confirm</a></li>
+                        <li><a href="#user-details">User Details & Update</a></li>
+                    </ul>
+                </nav>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="content">
+                <!-- Overview Section -->
+                <section id="overview" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <h1 style="margin: 0;">Accounts API Documentation</h1>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Welcome to the Accounts API</h3>
+                            <p>The Accounts API provides comprehensive authentication and user management functionality for the Uptorps platform. This includes user registration, email verification, login/logout, password management, and admin operations.</p>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Base URL</div>
+                            <div class="code-block">/api/accounts</div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Features</div>
+                            <ul style="margin-left: 20px; color: var(--text-gray);">
+                                <li>User registration with email verification</li>
+                                <li>Secure JWT-based authentication</li>
+                                <li>Rate limiting and throttling on sensitive endpoints</li>
+                                <li>Admin account management with role-based access</li>
+                                <li>Comprehensive audit logging for security events</li>
+                                <li>Password reset flow with token verification</li>
+                                <li>Account lockout protection against brute force attacks</li>
+                                <li>Email verification token management (30-minute expiry)</li>
+                            </ul>
+                        </div>
+
+                        <div class="alert info">
+                            <div class="alert-title">ℹ️ Important Notes</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>All requests/responses use JSON format</li>
+                                <li>Authentication uses Bearer token in Authorization header</li>
+                                <li>Email addresses are case-insensitive for all operations</li>
+                                <li>All timestamps are in UTC</li>
+                                <li>Access tokens expire in 15 minutes; refresh tokens in 24 hours</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Authentication Info -->
+                <section id="authentication" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <h2 style="margin: 0;">🔐 Authentication</h2>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>JWT Authentication</h3>
+                            <p>The API uses JSON Web Tokens (JWT) for authentication. After successful login, you'll receive an access token and refresh token.</p>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Using the Access Token</div>
+                            <p>Include the access token in the Authorization header of your requests:</p>
+                            <div class="code-block">Authorization: Bearer &lt;access_token&gt;</div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Token Lifetimes</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Token Type</th>
+                                        <th>Lifetime</th>
+                                        <th>Usage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Access Token</strong></td>
+                                        <td>15 minutes</td>
+                                        <td>API requests</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Refresh Token</strong></td>
+                                        <td>24 hours</td>
+                                        <td>Get new access token</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email Verification Token</strong></td>
+                                        <td>30 minutes</td>
+                                        <td>Verify email address</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Password Reset Token</strong></td>
+                                        <td>30 minutes</td>
+                                        <td>Reset password</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="alert warning">
+                            <div class="alert-title">⚠️ Security Important</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Never expose your tokens in public repositories</li>
+                                <li>Always use HTTPS in production</li>
+                                <li>Refresh your access token before it expires</li>
+                                <li>Store refresh tokens securely (HTTP-only cookies recommended)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- User Registration -->
+                <section id="registration" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge post">POST</span>
+                        <div class="endpoint-path">
+                            <h2>/register/</h2>
+                            <div class="url">/api/accounts/register/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Register a New User</h3>
+                            <p>Create a new user account. The user will receive an email verification link and must verify their email before they can log in. New users are created with <code>is_active=False</code> and <code>email_verified=False</code>.</p>
+                            <span class="auth-badge open">Public</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Request Body</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">username</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Unique username (max 150 chars)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">email</span></td>
+                                        <td>string (email)</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Unique email address</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">password</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Strong password (min 8 chars, mixed case, numbers, symbols)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">first_name</span></td>
+                                        <td>string</td>
+                                        <td><span class="optional-badge">OPTIONAL</span></td>
+                                        <td>User's first name (max 150 chars)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">last_name</span></td>
+                                        <td>string</td>
+                                        <td><span class="optional-badge">OPTIONAL</span></td>
+                                        <td>User's last name (max 150 chars)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">201 Created</span>
+                                    <span class="response-desc">User successfully created</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">400 Bad Request</span>
+                                    <span class="response-desc">Validation error (duplicate email, weak password, etc.)</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code warning">429 Too Many Requests</span>
+                                    <span class="response-desc">Rate limit exceeded (3 registrations per minute)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Request</div>
+                            <div class="request-example">
+                                <div class="request-example-title">cURL</div>
+                                <div class="code-block">curl -X POST https://api.uptorps.com/api/accounts/register/ \
+  -H "Content-Type: application/json" \
+  -d {
+    "username": "johndoe",
+    "email": "john@example.com",
+    "password": "SecurePass123!",
+    "first_name": "John",
+    "last_name": "Doe"
+  }</div>
+                            </div>
+
+                            <div class="request-example">
+                                <div class="request-example-title">JavaScript (Fetch)</div>
+                                <div class="code-block">const response = await fetch('https://api.uptorps.com/api/accounts/register/', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    username: 'johndoe',
+    email: 'john@example.com',
+    password: 'SecurePass123!',
+    first_name: 'John',
+    last_name: 'Doe'
+  })
+});
+const data = await response.json();
+console.log(data);</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Response (201)</div>
+                            <div class="code-block">{
+  "message": "User created"
+}</div>
+                        </div>
+
+                        <div class="alert info">
+                            <div class="alert-title">ℹ️ What Happens Next</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>An email verification link is sent to the user's email</li>
+                                <li>User must click the link to verify their email</li>
+                                <li>After verification, the user can log in</li>
+                                <li>Email verification link expires in 30 minutes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Email Verification -->
+                <section id="email-verification" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge post">POST</span>
+                        <div class="endpoint-path">
+                            <h2>/verify-email/</h2>
+                            <div class="url">/api/accounts/verify-email/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Verify User Email</h3>
+                            <p>Verify a user's email address using the verification token sent to their email. This activates the user account and allows them to log in.</p>
+                            <span class="auth-badge open">Public</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Request Body</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">token</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Email verification token from the email link</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">200 OK</span>
+                                    <span class="response-desc">Email verified successfully</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">400 Bad Request</span>
+                                    <span class="response-desc">Invalid or expired token, or email already verified</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">404 Not Found</span>
+                                    <span class="response-desc">User not found for this token</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Request</div>
+                            <div class="request-example">
+                                <div class="request-example-title">cURL</div>
+                                <div class="code-block">curl -X POST https://api.uptorps.com/api/accounts/verify-email/ \
+  -H "Content-Type: application/json" \
+  -d {
+    "token": "john@example.com:1xvqfWQ..."
+  }</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Response (200)</div>
+                            <div class="code-block">{
+  "detail": "Email verified successfully"
+}</div>
+                        </div>
+
+                        <div class="alert info">
+                            <div class="alert-title">ℹ️ Token Extraction</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>The token is embedded in the email verification link: <code>verify-email/?token=&lt;TOKEN&gt;</code></li>
+                                <li>Frontend should extract the token from the URL query parameter</li>
+                                <li>Token contains encrypted email and timestamp</li>
+                                <li>Tokens expire after 30 minutes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Resend Verification Email -->
+                <section id="email-resend" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge post">POST</span>
+                        <div class="endpoint-path">
+                            <h2>/resend-verification/</h2>
+                            <div class="url">/api/accounts/resend-verification/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Resend Verification Email</h3>
+                            <p>Send a new verification email to the user. Useful when the user didn't receive the original email or their token expired.</p>
+                            <span class="auth-badge open">Public</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Request Body</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">email</span></td>
+                                        <td>string (email)</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Email address of the user</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">200 OK</span>
+                                    <span class="response-desc">Email sent (or same message for security)</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code warning">429 Too Many Requests</span>
+                                    <span class="response-desc">Rate limit exceeded (3 per hour)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Response (200)</div>
+                            <div class="code-block">{
+  "detail": "If the email exists, a verification link was sent."
+}</div>
+                        </div>
+
+                        <div class="alert warning">
+                            <div class="alert-title">⚠️ Security Note</div>
+                            <p>For security reasons, this endpoint returns the same response whether the email exists or not. This prevents user enumeration attacks.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Login Endpoint -->
+                <section id="login" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge post">POST</span>
+                        <div class="endpoint-path">
+                            <h2>/login/</h2>
+                            <div class="url">/api/accounts/login/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>User Login</h3>
+                            <p>Authenticate a user and receive JWT tokens. Email must be verified and account must be active. Admin accounts are protected with account lockout after 5 failed attempts within 15 minutes.</p>
+                            <span class="auth-badge open">Public</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Request Body</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">email</span></td>
+                                        <td>string (email)</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>User's email address</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">password</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>User's password</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">200 OK</span>
+                                    <span class="response-desc">Login successful, returns access and refresh tokens</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">401 Unauthorized</span>
+                                    <span class="response-desc">Invalid credentials, unverified email, or inactive account</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code warning">429 Too Many Requests</span>
+                                    <span class="response-desc">Too many login attempts (10/min for users, 3/min for admins)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Request</div>
+                            <div class="request-example">
+                                <div class="request-example-title">cURL</div>
+                                <div class="code-block">curl -X POST https://api.uptorps.com/api/accounts/login/ \
+  -H "Content-Type: application/json" \
+  -d {
+    "email": "john@example.com",
+    "password": "SecurePass123!"
+  }</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Response (200)</div>
+                            <div class="code-block">{
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "user": {
+    "uuid": "550e8400-e29b-41d4-a716-446655440000",
+    "email": "john@example.com"
+  }
+}</div>
+                        </div>
+
+                        <div class="alert danger">
+                            <div class="alert-title">🔒 Security Features</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>Rate Limiting:</strong> Different limits for users (10/min) vs admins (3/min)</li>
+                                <li><strong>Account Lockout:</strong> Admins are locked for 15 minutes after 5 failed attempts</li>
+                                <li><strong>Email Verification:</strong> Users must verify email before login</li>
+                                <li><strong>Audit Logging:</strong> All login attempts are logged with IP and user agent</li>
+                                <li><strong>Password Hashing:</strong> Using Django's PBKDF2 algorithm</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Token Refresh -->
+                <section id="token-refresh" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge post">POST</span>
+                        <div class="endpoint-path">
+                            <h2>/refresh/</h2>
+                            <div class="url">/api/accounts/refresh/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Refresh Access Token</h3>
+                            <p>Get a new access token using your refresh token. The old refresh token is automatically rotated and blacklisted for security.</p>
+                            <span class="auth-badge open">Public</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Request Body</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">refresh</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>The refresh token from login response</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">200 OK</span>
+                                    <span class="response-desc">New access token issued, refresh token rotated</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">401 Unauthorized</span>
+                                    <span class="response-desc">Invalid or expired refresh token</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code warning">429 Too Many Requests</span>
+                                    <span class="response-desc">Rate limit exceeded (10 per minute)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Response (200)</div>
+                            <div class="code-block">{
+  "access": "eyJ0eXAiOiJKV1QiLCJhbGc...",
+  "refresh": "eyJ0eXAiOiJKV1QiLCJhbGc..."
+}</div>
+                        </div>
+
+                        <div class="alert info">
+                            <div class="alert-title">ℹ️ Token Rotation</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Each refresh request returns a NEW refresh token</li>
+                                <li>Old refresh token is automatically invalidated (blacklisted)</li>
+                                <li>This prevents replay attacks from stolen tokens</li>
+                                <li>Store the new refresh token after each refresh</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create Admin -->
+                <section id="admin-creation" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge post">POST</span>
+                        <div class="endpoint-path">
+                            <h2>/create-admin/</h2>
+                            <div class="url">/api/accounts/create-admin/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Create Admin Account</h3>
+                            <p>Create a new admin account. Only backend developers can create admin accounts. Admin can be either a Manager or a Developer with specialization.</p>
+                            <span class="auth-badge required">Backend Developer</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Request Body</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">email</span></td>
+                                        <td>string (email)</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Admin email address</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">username</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Admin username</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">password</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Strong password</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">role</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Must be "Admin"</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">admin_type</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>"Manager" or "Developer"</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">dev_specialization</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED if Developer</span></td>
+                                        <td>"Frontend", "Backend", or "Security"</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">201 Created</span>
+                                    <span class="response-desc">Admin account created successfully</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">401 Unauthorized</span>
+                                    <span class="response-desc">Not authenticated</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">403 Forbidden</span>
+                                    <span class="response-desc">Not a backend developer</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">400 Bad Request</span>
+                                    <span class="response-desc">Validation error in input data</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Request</div>
+                            <div class="request-example">
+                                <div class="request-example-title">Manager</div>
+                                <div class="code-block">curl -X POST https://api.uptorps.com/api/accounts/create-admin/ \
+  -H "Authorization: Bearer &lt;access_token&gt;" \
+  -H "Content-Type: application/json" \
+  -d {
+    "email": "manager@uptorps.com",
+    "username": "manager01",
+    "password": "SecureAdminPass123!",
+    "role": "Admin",
+    "admin_type": "Manager"
+  }</div>
+                            </div>
+
+                            <div class="request-example">
+                                <div class="request-example-title">Developer</div>
+                                <div class="code-block">curl -X POST https://api.uptorps.com/api/accounts/create-admin/ \
+  -H "Authorization: Bearer &lt;access_token&gt;" \
+  -H "Content-Type: application/json" \
+  -d {
+    "email": "backend_dev@uptorps.com",
+    "username": "backenddev01",
+    "password": "SecureAdminPass123!",
+    "role": "Admin",
+    "admin_type": "Developer",
+    "dev_specialization": "Backend"
+  }</d</div>
+                            </div>
+                        </div>
+
+                        <div class="alert danger">
+                            <div class="alert-title">🔒 Important Notes</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Only Backend Developers can create admin accounts</li>
+                                <li>Admin accounts are created with <code>is_staff=True</code></li>
+                                <li>Email is automatically verified for admins</li>
+                                <li>Accounts are immediately active</li>
+                                <li>Admin creation is audited and logged</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Delete User -->
+                <section id="user-deletion" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge delete">DELETE</span>
+                        <div class="endpoint-path">
+                            <h2>/users/&lt;user_id&gt;/</h2>
+                            <div class="url">/api/accounts/users/&lt;uuid:user_uuid&gt;/delete/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Delete User Account</h3>
+                            <p>Delete a user account. Only admins can delete users. Users cannot delete their own accounts (prevents accidental deletion). All user data is removed from the system.</p>
+                            <span class="auth-badge required">Admin</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">URL Parameters</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">user_id</span></td>
+                                        <td>integer</td>
+                                        <td>The ID of the user to delete</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">204 No Content</span>
+                                    <span class="response-desc">User deleted successfully</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">400 Bad Request</span>
+                                    <span class="response-desc">Admin trying to delete themselves</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">401 Unauthorized</span>
+                                    <span class="response-desc">Not authenticated</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">403 Forbidden</span>
+                                    <span class="response-desc">Not an admin</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">404 Not Found</span>
+                                    <span class="response-desc">User not found</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Request</div>
+                            <div class="request-example">
+                                <div class="request-example-title">cURL</div>
+                                <div class="code-block">curl -X DELETE https://api.uptorps.com/api/accounts/users/123/ \
+  -H "Authorization: Bearer &lt;access_token&gt;"</div>
+                            </div>
+                        </div>
+
+                        <div class="alert danger">
+                            <div class="alert-title">⚠️ Important</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>This action is irreversible</li>
+                                <li>Admins cannot delete themselves</li>
+                                <li>Deletion is audited and logged with admin details</li>
+                                <li>User deletion is rate limited to 3 per minute</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Password Reset Request -->
+                <section id="password-reset" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge post">POST</span>
+                        <div class="endpoint-path">
+                            <h2>/password-reset/</h2>
+                            <div class="url">/api/accounts/password-reset/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Request Password Reset</h3>
+                            <p>Send a password reset link to the user's email. The link contains a token valid for 30 minutes. For security, the endpoint returns the same response whether the email exists or not.</p>
+                            <span class="auth-badge open">Public</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Request Body</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">email</span></td>
+                                        <td>string (email)</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Email address to reset password for</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">200 OK</span>
+                                    <span class="response-desc">Same response for security (email sent if exists)</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code warning">429 Too Many Requests</span>
+                                    <span class="response-desc">Rate limit exceeded (3 per minute)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Response (200)</div>
+                            <div class="code-block">{
+  "detail": "If the email exists, a reset link was sent."
+}</div>
+                        </div>
+
+                        <div class="alert info">
+                            <div class="alert-title">ℹ️ Token Information</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>Reset token is sent via email with a link</li>
+                                <li>Token format: <code>email:timestamp:signature</code></li>
+                                <li>Token expires in 30 minutes</li>
+                                <li>Cannot be reused after password is reset</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Password Reset Confirm -->
+                <section id="password-confirm" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge post">POST</span>
+                        <div class="endpoint-path">
+                            <h2>/password-reset/confirm/</h2>
+                            <div class="url">/api/accounts/password-reset/confirm/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Confirm Password Reset</h3>
+                            <p>Complete the password reset process using the token from the email and a new password. After successful reset, the user can log in with the new password.</p>
+                            <span class="auth-badge open">Public</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Request Body</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Required</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">token</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>Password reset token from email</td>
+                                    </tr>
+                                    <tr>
+                                        <td><span class="param-name">new_password</span></td>
+                                        <td>string</td>
+                                        <td><span class="required-badge">REQUIRED</span></td>
+                                        <td>New password (min 8 characters)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">200 OK</span>
+                                    <span class="response-desc">Password reset successfully</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">400 Bad Request</span>
+                                    <span class="response-desc">Invalid or expired token, or weak password</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">404 Not Found</span>
+                                    <span class="response-desc">User not found for this token</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Example Response (200)</div>
+                            <div class="code-block">{
+  "detail": "Password reset successful"
+}</div>
+                        </div>
+
+                        <div class="alert success">
+                            <div class="alert-title">✓ After Reset</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li>User can immediately log in with new password</li>
+                                <li>All previous sessions remain valid</li>
+                                <li>Token is invalidated after use</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- User Details & Update -->
+                <section id="user-details" class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method-badge get">GET</span>
+                        <span class="method-badge patch">PATCH</span>
+                        <span class="method-badge put">PUT</span>
+                        <div class="endpoint-path">
+                            <h2>/users/info/&lt;uuid&gt;/</h2>
+                            <div class="url">/api/accounts/users/info/&lt;uuid:uuid&gt;/</div>
+                        </div>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Get/Update User Information</h3>
+                            <p>Retrieve or update user account information. Users can only view/edit their own profiles unless they are admins. Sensitive fields like role and admin_type are restricted to backend developers.</p>
+                            <span class="auth-badge required">Authenticated</span>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">URL Parameters</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span class="param-name">uuid</span></td>
+                                        <td>UUID</td>
+                                        <td>The user's unique identifier (UUID)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="two-column mt-20">
+                            <div>
+                                <h4 style="margin-bottom: 12px;">GET - Read-Only Fields</h4>
+                                <div class="code-block">uuid
+email
+role
+admin_type
+dev_specialization
+is_active
+date_joined</div>
+                            </div>
+                            <div>
+                                <h4 style="margin-bottom: 12px;">PATCH/PUT - Editable Fields</h4>
+                                <div class="code-block">username
+first_name
+last_name
+email
+role (admin only)
+admin_type (admin only)
+dev_specialization (admin only)</div>
+                            </div>
+                        </div>
+
+                        <div class="section mt-20">
+                            <div class="section-title">Response Codes</div>
+                            <div style="margin-top: 12px;">
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code success">200 OK</span>
+                                    <span class="response-desc">User data retrieved or updated successfully</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">401 Unauthorized</span>
+                                    <span class="response-desc">Not authenticated</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">403 Forbidden</span>
+                                    <span class="response-desc">Cannot view/edit this user's profile</span>
+                                </div>
+                                <div style="margin-bottom: 12px;">
+                                    <span class="response-code error">404 Not Found</span>
+                                    <span class="response-desc">User not found</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">GET Example</div>
+                            <div class="request-example">
+                                <div class="request-example-title">Request</div>
+                                <div class="code-block">curl https://api.uptorps.com/api/accounts/users/info/550e8400-e29b-41d4-a716-446655440000/ \
+  -H "Authorization: Bearer &lt;access_token&gt;"</div>
+                            </div>
+
+                            <div class="request-example">
+                                <div class="request-example-title">Response (200)</div>
+                                <div class="code-block">{
+  "uuid": "550e8400-e29b-41d4-a716-446655440000",
+  "email": "john@example.com",
+  "role": "Student",
+  "admin_type": null,
+  "dev_specialization": null,
+  "is_active": true,
+  "date_joined": "2024-02-01T10:30:00Z"
+}</div>
+                            </div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">PATCH Example (Partial Update)</div>
+                            <div class="request-example">
+                                <div class="request-example-title">Request</div>
+                                <div class="code-block">curl -X PATCH https://api.uptorps.com/api/accounts/users/info/550e8400-e29b-41d4-a716-446655440000/ \
+  -H "Authorization: Bearer &lt;access_token&gt;" \
+  -H "Content-Type: application/json" \
+  -d {
+    "first_name": "Johnny",
+    "last_name": "Doe"
+  }</d</div>
+                            </div>
+                        </div>
+
+                        <div class="alert info">
+                            <div class="alert-title">ℹ️ Permission Rules</div>
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><strong>Users:</strong> Can only view/edit their own profiles</li>
+                                <li><strong>Admins:</strong> Can view and edit any user's profile</li>
+                                <li><strong>Role/Admin Fields:</strong> Only backend developers and above can modify</li>
+                                <li><strong>Self-Edit:</strong> Users cannot change their own role</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Error Handling -->
+                <section class="endpoint-card" style="margin-top: 40px;">
+                    <div class="endpoint-header">
+                        <h2 style="margin: 0;">⚠️ Error Handling</h2>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>Error Response Format</h3>
+                            <p>All API errors follow a standard format with an appropriate HTTP status code and error details in the response body.</p>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Standard Error Response</div>
+                            <div class="code-block">{
+  "detail": "Error message explaining what went wrong"
+}</div>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Common HTTP Status Codes</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Meaning</th>
+                                        <th>Example</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>200 OK</strong></td>
+                                        <td>Request successful</td>
+                                        <td>Login, token refresh, data retrieval</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>201 Created</strong></td>
+                                        <td>Resource created</td>
+                                        <td>User registration, admin creation</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>204 No Content</strong></td>
+                                        <td>Success with no response body</td>
+                                        <td>User deletion</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>400 Bad Request</strong></td>
+                                        <td>Invalid request data</td>
+                                        <td>Weak password, duplicate email</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>401 Unauthorized</strong></td>
+                                        <td>Authentication required/failed</td>
+                                        <td>Invalid credentials, expired token</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>403 Forbidden</strong></td>
+                                        <td>Insufficient permissions</td>
+                                        <td>Non-admin trying to delete user</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>404 Not Found</strong></td>
+                                        <td>Resource not found</td>
+                                        <td>User doesn't exist</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>429 Too Many Requests</strong></td>
+                                        <td>Rate limit exceeded</td>
+                                        <td>Too many login attempts</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Rate Limiting -->
+                <section class="endpoint-card">
+                    <div class="endpoint-header">
+                        <h2 style="margin: 0;">⚡ Rate Limiting</h2>
+                    </div>
+                    <div class="endpoint-body">
+                        <div class="endpoint-description">
+                            <h3>API Rate Limits</h3>
+                            <p>The API implements rate limiting to protect against abuse. Different endpoints have different limits. Rate limits are per-user/email, not per IP.</p>
+                        </div>
+
+                        <div class="section">
+                            <div class="section-title">Rate Limits by Endpoint</div>
+                            <table class="params-table">
+                                <thead>
+                                    <tr>
+                                        <th>Endpoint</th>
+                                        <th>Limit</th>
+                                        <th>Window</th>
+                                        <th>Identifier</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Register</td>
+                                        <td>3 requests</td>
+                                        <td>1 minute</td>
+                                        <td>IP address</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Login (User)</td>
+                                        <td>10 requests</td>
+                                        <td>1 minute</td>
+                                        <td>Email + IP</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Login (Admin)</td>
+                                        <td>3 requests</td>
+                                        <td>1 minute</td>
+                                        <td>Email + IP</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Resend Verification</td>
+                                        <td>3 requests</td>
+                                        <td>1 hour</td>
+                                        <td>Email</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Password Reset Request</td>
+                                        <td>3 requests</td>
+                                        <td>1 minute</td>
+                                        <td>Email</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Token Refresh</td>
+                                        <td>10 requests</td>
+                                        <td>1 minute</td>
+                                        <td>User</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="alert warning">
+                            <div class="alert-title">⚠️ Rate Limit Response</div>
+                            <p>When rate limit is exceeded, the API returns:</p>
+                            <div class="code-block">HTTP/1.1 429 Too Many Requests
+{
+  "detail": "Request was throttled. Expected available in ... seconds."
+}</d</div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <script src="{% static 'docs/script.js' %}"></script>
+</body>
+</html>

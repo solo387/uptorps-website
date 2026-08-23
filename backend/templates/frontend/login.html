@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - UPTORPS</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="login">
+    <div class="auth-container">
+        <div class="auth-left">
+            <div class="auth-left-content">
+                <div class="logo">
+                    <div class="logo-icon">🎓</div>
+                    <span>UPTORPS</span>
+                </div>
+
+                <h1>Learn. Grow. Prepare for Work.</h1>
+                <p>Pick up where you left off — your courses, assessments and progress are waiting.</p>
+
+                <ul class="feature-list">
+                    <li>Learning</li>
+                    <li>Assessment</li>
+                    <li>Skills</li>
+                    <li>Experience</li>
+                    <li>Employability</li>
+                    <li>Lifelong Learning</li>
+                </ul>
+            </div>
+
+            <div class="auth-left-footer">
+                <p>Secure authentication with email verification</p>
+            </div>
+        </div>
+
+        <div class="auth-right">
+            <a href="/index.html" class="back-link">← Back to UPTORPS</a>
+
+            <div class="auth-form-container">
+                <h2>Welcome back</h2>
+                <p>Sign in to continue your UPTORPS learning journey.</p>
+
+                <div id="form-message" aria-live="polite"></div>
+
+                <form id="login-form">
+                    <div class="portal-selector" aria-label="Choose portal">
+                        <label class="portal-option">
+                            <input type="radio" name="portal" value="student" checked>
+                            <span>Student</span>
+                        </label>
+                        <label class="portal-option">
+                            <input type="radio" name="portal" value="admin">
+                            <span>Admin</span>
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required autofocus>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="password-toggle">
+                            <input type="password" id="password" name="password" placeholder="••••••••" required>
+                            <button type="button" class="toggle-password" data-target="password" aria-label="Show password">👁️</button>
+                        </div>
+                    </div>
+
+                    <div class="form-footer">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Remember me</label>
+                        </div>
+                        <a href="/forgot-password.html" class="forgot-password">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                </form>
+
+                <div class="auth-footer">
+                    Don't have a student account? <a href="/signup.html">Create Student Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const portal = params.get('portal') === 'admin' ? 'admin' : 'student';
+      const radios = document.querySelectorAll('input[name="portal"]');
+      radios.forEach((radio) => {
+        radio.checked = radio.value === portal;
+      });
+    })();
+  </script>
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Learning Management</title>
+    <link rel="stylesheet" href="/static/css/admin.css" />
+    <script src="/static/js/admin.js" defer></script>
+    <script>
+      (function () {
+        const role = localStorage.getItem('uptorps_role');
+        const loggedIn = localStorage.getItem('uptorps_logged_in') === 'true';
+        if (!loggedIn || role !== 'admin') {
+          window.location.href = '/login.html?portal=admin';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-mark">◈</div>
+          <div class="brand-name">
+            <span>Uptorps</span>
+            <span class="brand-small">Management Portal</span>
+          </div>
+        </div>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Overview</button>
+          <a class="nav-item" href="/admin-dashboard.html"><span class="icon">▣</span>Dashboard</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Learning</button>
+          <a class="nav-item active" href="/admin-learning.html"><span class="icon">▤</span>Learning Management</a>
+          <a class="nav-item" href="/admin-quizzes.html"><span class="icon">≋</span>Quizzes</a>
+          <a class="nav-item" href="/admin-question-bank.html"><span class="icon">▣</span>Question Bank</a>
+          <a class="nav-item" href="/admin-grading.html"><span class="icon">✓</span>Grading</a>
+          <a class="nav-item" href="/admin-results.html"><span class="icon">▤</span>Results</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">People</button>
+          <a class="nav-item" href="#"><span class="icon">◌</span>Students</a>
+          <a class="nav-item" href="#"><span class="icon">◍</span>Users</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Administration</button>
+          <a class="nav-item" href="#"><span class="icon">◐</span>Admin & Staff Accounts</a>
+          <a class="nav-item" href="#"><span class="icon">＋</span>Create Account</a>
+          <a class="nav-item" href="#"><span class="icon">◔</span>Account Activity</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Commerce</button>
+          <a class="nav-item" href="#"><span class="icon">◫</span>Payments</a>
+          <a class="nav-item" href="#"><span class="icon">✦</span>Premium</a>
+          <a class="nav-item" href="#"><span class="icon">◧</span>Wallet</a>
+          <a class="nav-item" href="#"><span class="icon">⟲</span>Referral</a>
+        </nav>
+
+        <div class="sidebar-footer">Authorization is enforced by the backend.</div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="role-select">Admin · Manager ▾</div>
+          <div class="user-badge">
+            <span class="user-avatar">AB</span>
+            <span>ama.boaten@uptorps.com</span>
+            <span>AB</span>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="page-header">
+            <h1>Learning Management</h1>
+            <p>Difficulty → Level → Programme → Course → Quiz → Question → Answer.</p>
+          </div>
+
+          <div class="card-grid">
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Difficulties</div>
+                <span class="icon-box soft">◫</span>
+              </div>
+              <div class="stat-value">3</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Levels</div>
+                <span class="icon-box soft">◫</span>
+              </div>
+              <div class="stat-value">4</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Programmes</div>
+                <span class="icon-box soft">▣</span>
+              </div>
+              <div class="stat-value">4</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Courses</div>
+                <span class="icon-box soft">☰</span>
+              </div>
+              <div class="stat-value">12</div>
+            </div>
+          </div>
+
+          <div class="segment">
+            <div class="category-box">
+              <div class="category-box-header">
+                <span>General Science</span>
+                <span class="chip">3 courses</span>
+              </div>
+              <div class="category-box-body">
+                <div class="category-row"><span>Biology</span><span class="small-tag">1 quiz</span></div>
+                <div class="category-row"><span>Chemistry</span><span class="small-tag">1 quiz</span></div>
+                <div class="category-row"><span>Physics</span><span class="small-tag">0 quizzes</span></div>
+              </div>
+            </div>
+
+            <div class="category-box">
+              <div class="category-box-header">
+                <span>Business</span>
+                <span class="chip">3 courses</span>
+              </div>
+              <div class="category-box-body">
+                <div class="category-row"><span>Accounting</span><span class="small-tag">1 quiz</span></div>
+                <div class="category-row"><span>Economics</span><span class="small-tag">1 quiz</span></div>
+                <div class="category-row"><span>Marketing</span><span class="small-tag">0 quizzes</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="segment">
+            <div class="category-box">
+              <div class="category-box-header">
+                <span>Information Technology</span>
+                <span class="chip">3 courses</span>
+              </div>
+              <div class="category-box-body">
+                <div class="category-row"><span>Networking</span><span class="small-tag">1 quiz</span></div>
+                <div class="category-row"><span>Databases</span><span class="small-tag">0 quizzes</span></div>
+                <div class="category-row"><span>Web Development</span><span class="small-tag">1 quiz</span></div>
+              </div>
+            </div>
+
+            <div class="category-box">
+              <div class="category-box-header">
+                <span>Nursing</span>
+                <span class="chip">3 courses</span>
+              </div>
+              <div class="category-box-body">
+                <div class="category-row"><span>Anatomy</span><span class="small-tag">0 quizzes</span></div>
+                <div class="category-row"><span>Pharmacology</span><span class="small-tag">1 quiz</span></div>
+                <div class="category-row"><span>Patient Care</span><span class="small-tag">1 quiz</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top: 24px;">
+            <div class="headline-row">
+              <h3 class="panel-title" style="margin:0;">Levels and difficulty coverage</h3>
+              <div class="inline-toolbar">
+                <span class="chip">Level 100</span>
+                <span class="chip">Level 200</span>
+                <span class="chip">Level 300</span>
+                <span class="chip">Level 400</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

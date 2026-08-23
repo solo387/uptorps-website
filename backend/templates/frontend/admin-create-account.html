@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Account</title>
+    <link rel="stylesheet" href="/static/css/admin.css" />
+    <script src="/static/js/admin.js" defer></script>
+    <script>
+      (function () {
+        const role = localStorage.getItem('uptorps_role');
+        const loggedIn = localStorage.getItem('uptorps_logged_in') === 'true';
+        if (!loggedIn || role !== 'admin') {
+          window.location.href = '/login.html?portal=admin';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-mark">◈</div>
+          <div class="brand-name">
+            <span>Uptorps</span>
+            <span class="brand-small">Management Portal</span>
+          </div>
+        </div>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Overview</button>
+          <a class="nav-item" href="/admin-dashboard.html"><span class="icon">▣</span>Dashboard</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Learning</button>
+          <a class="nav-item" href="/admin-learning.html"><span class="icon">▤</span>Learning Management</a>
+          <a class="nav-item" href="/admin-quizzes.html"><span class="icon">≋</span>Quizzes</a>
+          <a class="nav-item" href="/admin-question-bank.html"><span class="icon">▣</span>Question Bank</a>
+          <a class="nav-item" href="/admin-grading.html"><span class="icon">✓</span>Grading</a>
+          <a class="nav-item" href="/admin-results.html"><span class="icon">▤</span>Results</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">People</button>
+          <a class="nav-item" href="/admin-students.html"><span class="icon">◌</span>Students</a>
+          <a class="nav-item" href="/admin-users.html"><span class="icon">◍</span>Users</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Administration</button>
+          <a class="nav-item" href="/admin-staff-accounts.html"><span class="icon">◐</span>Admin & Staff Accounts</a>
+          <a class="nav-item active" href="/admin-create-account.html"><span class="icon">＋</span>Create Account</a>
+          <a class="nav-item" href="/admin-account-activity.html"><span class="icon">◔</span>Account Activity</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Commerce</button>
+          <a class="nav-item" href="/admin-payments.html"><span class="icon">◫</span>Payments</a>
+          <a class="nav-item" href="/admin-premium.html"><span class="icon">✦</span>Premium</a>
+          <a class="nav-item" href="/admin-wallet.html"><span class="icon">◧</span>Wallet</a>
+          <a class="nav-item" href="/admin-referral.html"><span class="icon">⟲</span>Referral</a>
+        </nav>
+
+        <div class="sidebar-footer">Authorization is enforced by the backend.</div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="role-select">Admin · Manager ▾</div>
+          <div class="user-badge">
+            <span class="user-avatar">AB</span>
+            <span>ama.boaten@uptorps.com</span>
+            <span>AB</span>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="page-top-actions">
+            <div class="title-wrap">
+              <h1 class="page-title">Create Administrative Account</h1>
+              <p class="page-subtitle">Role, admin type and developer specialization map directly onto the existing backend account model.</p>
+            </div>
+            <button class="page-cta">Admin Manager only</button>
+          </div>
+
+          <div class="wizard">
+            <div class="wizard-step active"><span class="idx">1</span>Account type</div>
+            <div class="wizard-step"><span class="idx">2</span>User information</div>
+            <div class="wizard-step"><span class="idx">3</span>Review</div>
+          </div>
+
+          <div class="content-card" id="account-wizard">
+            <div class="wizard-panel active" data-step="1">
+              <h3>Account type</h3>
+              <div class="account-type-grid">
+                <div class="type-option selected" data-role="Administrator">
+                  <div>
+                    <h4>Administrator</h4>
+                  </div>
+                  <p>ADMIN role = Admin Type selected next</p>
+                </div>
+                <div class="type-option" data-role="Teacher">
+                  <div>
+                    <h4>Teacher</h4>
+                  </div>
+                  <p>TEACHER role with standard teaching access.</p>
+                </div>
+                <div class="type-option" data-role="Premium Teacher">
+                  <div>
+                    <h4>Premium Teacher</h4>
+                  </div>
+                  <p>PREMIUM_TEACHER role as defined by the backend.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="wizard-panel" data-step="2">
+              <h3>User information</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="fullName">Full name</label>
+                  <input id="fullName" name="fullName" type="text" placeholder="Ava Boateng" />
+                </div>
+                <div class="field">
+                  <label for="emailAddress">Email address</label>
+                  <input id="emailAddress" name="emailAddress" type="email" placeholder="ava.boateng@uptorps.io" />
+                </div>
+                <div class="field">
+                  <label for="password">Password</label>
+                  <input id="password" name="password" type="password" placeholder="At least 8 characters" />
+                </div>
+                <div class="field">
+                  <label for="confirmPassword">Confirm password</label>
+                  <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Re-enter password" />
+                </div>
+                <div class="field" id="adminTypeField">
+                  <label for="adminTypeSelect">Admin type</label>
+                  <select id="adminTypeSelect" name="adminTypeSelect">
+                    <option value="">Select admin type</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Developer">Developer</option>
+                  </select>
+                </div>
+                <div class="field" id="specializationField">
+                  <label for="specializationSelect">Specialization</label>
+                  <select id="specializationSelect" name="specializationSelect">
+                    <option value="">Select specialization</option>
+                    <option value="Frontend Developer">Frontend Developer</option>
+                    <option value="Backend Developer">Backend Developer</option>
+                    <option value="Security Developer">Security Developer</option>
+                    <option value="Operations">Operations</option>
+                  </select>
+                </div>
+              </div>
+
+            <div class="wizard-panel" data-step="3">
+              <h3>Review</h3>
+              <div class="review-summary">
+                <div class="review-row">
+                  <span>Role</span>
+                  <strong id="reviewRole">Administrator</strong>
+                </div>
+                <div class="review-row">
+                  <span>Admin type</span>
+                  <strong id="reviewAdminType">—</strong>
+                </div>
+                <div class="review-row">
+                  <span>Specialization</span>
+                  <strong id="reviewSpecialization">—</strong>
+                </div>
+                <div class="review-row">
+                  <span>Full name</span>
+                  <strong id="reviewName">—</strong>
+                </div>
+                <div class="review-row">
+                  <span>Email</span>
+                  <strong id="reviewEmail">—</strong>
+                </div>
+              </div>
+            </div>
+
+          <div class="footer-row">
+            <button class="page-cta" id="wizardBack">Back</button>
+            <div class="controls">
+              <button class="page-cta" id="wizardCancel">Cancel</button>
+              <button class="page-cta primary" id="wizardPrimaryAction">Continue</button>
+            </div>
+          </div>
+
+          <div class="footer-note" style="margin-top: 22px;">
+            Success is displayed only after backend confirmation. Newly created Admin Developers receive no account-creation capability — that authority stays with the Admin Manager.
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

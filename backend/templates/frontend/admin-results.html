@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Results</title>
+    <link rel="stylesheet" href="/static/css/admin.css" />
+    <script src="/static/js/admin.js" defer></script>
+    <script>
+      (function () {
+        const role = localStorage.getItem('uptorps_role');
+        const loggedIn = localStorage.getItem('uptorps_logged_in') === 'true';
+        if (!loggedIn || role !== 'admin') {
+          window.location.href = '/login.html?portal=admin';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-mark">◈</div>
+          <div class="brand-name">
+            <span>Uptorps</span>
+            <span class="brand-small">Management Portal</span>
+          </div>
+        </div>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Overview</button>
+          <a class="nav-item" href="/admin-dashboard.html"><span class="icon">▣</span>Dashboard</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Learning</button>
+          <a class="nav-item" href="/admin-learning.html"><span class="icon">▤</span>Learning Management</a>
+          <a class="nav-item" href="/admin-quizzes.html"><span class="icon">≋</span>Quizzes</a>
+          <a class="nav-item" href="/admin-question-bank.html"><span class="icon">▣</span>Question Bank</a>
+          <a class="nav-item" href="/admin-grading.html"><span class="icon">✓</span>Grading</a>
+          <a class="nav-item active" href="/admin-results.html"><span class="icon">▤</span>Results</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">People</button>
+          <a class="nav-item" href="#"><span class="icon">◌</span>Students</a>
+          <a class="nav-item" href="#"><span class="icon">◍</span>Users</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Administration</button>
+          <a class="nav-item" href="#"><span class="icon">◐</span>Admin & Staff Accounts</a>
+          <a class="nav-item" href="#"><span class="icon">＋</span>Create Account</a>
+          <a class="nav-item" href="#"><span class="icon">◔</span>Account Activity</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Commerce</button>
+          <a class="nav-item" href="#"><span class="icon">◫</span>Payments</a>
+          <a class="nav-item" href="#"><span class="icon">✦</span>Premium</a>
+          <a class="nav-item" href="#"><span class="icon">◧</span>Wallet</a>
+          <a class="nav-item" href="#"><span class="icon">⟲</span>Referral</a>
+        </nav>
+
+        <div class="sidebar-footer">Authorization is enforced by the backend.</div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="role-select">Admin · Manager ▾</div>
+          <div class="user-badge">
+            <span class="user-avatar">AB</span>
+            <span>ama.boaten@uptorps.com</span>
+            <span>AB</span>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="page-header">
+            <h1>Results</h1>
+            <p>Backend-released outcomes. Nothing here is recalculated in the browser.</p>
+          </div>
+
+          <div class="panel">
+            <div class="filters">
+              <input class="input" type="text" data-search placeholder="Search by student or quiz" />
+              <select class="select"><option>All outcomes</option></select>
+            </div>
+
+            <div class="table-wrap" style="margin-top: 18px;">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Quiz</th>
+                    <th>Submitted</th>
+                    <th>Score</th>
+                    <th>Percentage</th>
+                    <th>Outcome</th>
+                    <th>Result status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-row>
+                    <td>Kojo Asante</td>
+                    <td>Cell Biology Fundamentals</td>
+                    <td>2026-08-01 09:16</td>
+                    <td>8</td>
+                    <td>80%</td>
+                    <td><span class="badge success">Success</span></td>
+                    <td><span class="badge success">Result available</span></td>
+                    <td><button class="btn small">View result</button></td>
+                  </tr>
+                  <tr data-row>
+                    <td>Adjoa Frimpong</td>
+                    <td>Pharmacology Short Answer Set</td>
+                    <td>2026-08-01 10:41</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><span class="badge pending">Pending</span></td>
+                    <td><span class="badge pending">Pending</span></td>
+                    <td><button class="btn small">View result</button></td>
+                  </tr>
+                  <tr data-row>
+                    <td>Yaa Owusu</td>
+                    <td>Macroeconomics Theory Paper</td>
+                    <td>2026-07-31 14:22</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><span class="badge grading">Grading</span></td>
+                    <td><span class="badge grading">Grading</span></td>
+                    <td><button class="btn small">View result</button></td>
+                  </tr>
+                  <tr data-row>
+                    <td>Kofi Mensah</td>
+                    <td>Financial Accounting Principles</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><span class="badge pending">Pending</span></td>
+                    <td><span class="badge pending">Pending</span></td>
+                    <td><button class="btn small">View result</button></td>
+                  </tr>
+                  <tr data-row>
+                    <td>Isi Nyarko</td>
+                    <td>Web Development Capstone Assessment</td>
+                    <td>2026-07-30 10:52</td>
+                    <td>71</td>
+                    <td>71%</td>
+                    <td><span class="badge success">Success</span></td>
+                    <td><span class="badge success">Result available</span></td>
+                    <td><button class="btn small">View result</button></td>
+                  </tr>
+                  <tr data-row>
+                    <td>Nii Armah</td>
+                    <td>Cell Biology Fundamentals</td>
+                    <td>2026-07-29 11:10</td>
+                    <td>4</td>
+                    <td>40%</td>
+                    <td><span class="badge failure">Failure</span></td>
+                    <td><span class="badge success">Result available</span></td>
+                    <td><button class="btn small">View result</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

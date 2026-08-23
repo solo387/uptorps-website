@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.sqlite3
+*.log
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+
+# Django
+.env
+.env.*
+staticfiles/
+media/
+
+# OS/editor
+.DS_Store
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Local data
+*.db
+
+# Nested frontend repo intentionally left out of this GitHub repo
+frontend/

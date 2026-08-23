@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Referral & Wallet - UPTORPS</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-page="referral">
+    <div class="dashboard referral-page">
+        <nav class="dashboard-nav">
+            <div class="dashboard-nav-left">
+                <div class="logo">
+                    <div class="logo-icon">🎓</div>
+                    <span>UPTORPS</span>
+                </div>
+            </div>
+            <div class="dashboard-nav-right">
+                <span class="user-email" id="user-email">student@uptorps.com</span>
+                <a href="/login.html" class="logout-btn" data-action="logout">→ Sign out</a>
+            </div>
+        </nav>
+
+        <div class="dashboard-container">
+            <div class="referral-header">
+                <div class="module-label">Referral & Wallet</div>
+                <h1>Grow your earnings and invite friends.</h1>
+                <p>Share your unique link and track your referral progress in one place.</p>
+            </div>
+
+            <div class="referral-grid">
+                <div class="referral-section">
+                    <h2>Referral link</h2>
+                    <div class="referral-link-box">
+                        <input id="referral-link" class="referral-link-input" type="text" value="https://uptorps.com/ref/learner-2048" readonly>
+                        <button type="button" class="copy-btn" data-copy-target="referral-link">Copy link</button>
+                    </div>
+
+                    <div class="matrix-grid">
+                        <div class="matrix-card">
+                            <div class="matrix-label">Invites</div>
+                            <div class="matrix-value">12</div>
+                            <div class="matrix-detail">Friends referred</div>
+                        </div>
+                        <div class="matrix-card">
+                            <div class="matrix-label">Approved</div>
+                            <div class="matrix-value">7</div>
+                            <div class="matrix-detail">Verified sign-ups</div>
+                        </div>
+                        <div class="matrix-card">
+                            <div class="matrix-label">Pending</div>
+                            <div class="matrix-value">5</div>
+                            <div class="matrix-detail">Awaiting review</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary add-referral-btn" type="button">Add new referral</button>
+
+                    <div class="commission-info">
+                        <p>Earn commission when a referral completes a paid programme and stays active for the required learning period.</p>
+                    </div>
+                </div>
+
+                <div class="earning-section">
+                    <div class="earning-header">
+                        <h2>Earnings</h2>
+                        <span class="active-badge">ACTIVE</span>
+                    </div>
+
+                    <div class="earning-card">
+                        <div class="earning-item">
+                            <div class="earning-label">Available balance</div>
+                            <div class="earning-amount">GHS 1,285.00</div>
+                            <div class="earning-detail">Ready for payout this month</div>
+                        </div>
+
+                        <div class="earning-item">
+                            <div class="earning-label">Pending commission</div>
+                            <div class="earning-amount">GHS 420.00</div>
+                            <div class="earning-detail">Waiting on referral approvals</div>
+                        </div>
+
+                        <div class="earning-item">
+                            <div class="earning-label">Capacity</div>
+                            <div class="capacity-bar-container">
+                                <div class="capacity-bar">
+                                    <div class="capacity-fill" style="width: 68%"></div>
+                                </div>
+                            </div>
+                            <div class="earning-detail">68% of monthly payout capacity reached</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      (function () {
+        const role = localStorage.getItem('uptorps_role');
+        const loggedIn = localStorage.getItem('uptorps_logged_in') === 'true';
+        if (!loggedIn || role !== 'student') {
+          window.location.href = '/login.html?portal=student';
+        }
+      })();
+    </script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual env
+virt/
+
+# Environment variables
+.env
+
+# Database
+*.sqlite3
+
+# Django
+#staticfiles/
+media/
+
+# OS
+.DS_Store
+openapi.*
+
+#celery -A core worker -l info
+*.iml
+*.xml
+.idea/uptorps-backend.iml
+celerybeat-*
+
+# Ruflo local secrets and runtime data
+.env.local
+.env.*.local
+.claude-flow/
+.claude
+.idea
+.swarm
+.mcp.json
+ruvector.db
+.env-backend
+.env_web
+.env_worker
+.env_backend

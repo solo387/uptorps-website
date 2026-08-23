@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wallet</title>
+    <link rel="stylesheet" href="/static/css/admin.css" />
+    <script src="/static/js/admin.js" defer></script>
+    <script>
+      (function () {
+        const role = localStorage.getItem('uptorps_role');
+        const loggedIn = localStorage.getItem('uptorps_logged_in') === 'true';
+        if (!loggedIn || role !== 'admin') {
+          window.location.href = '/login.html?portal=admin';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-mark">◈</div>
+          <div class="brand-name">
+            <span>Uptorps</span>
+            <span class="brand-small">Management Portal</span>
+          </div>
+        </div>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Overview</button>
+          <a class="nav-item" href="/admin-dashboard.html"><span class="icon">▣</span>Dashboard</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Learning</button>
+          <a class="nav-item" href="/admin-learning.html"><span class="icon">▤</span>Learning Management</a>
+          <a class="nav-item" href="/admin-quizzes.html"><span class="icon">≋</span>Quizzes</a>
+          <a class="nav-item" href="/admin-question-bank.html"><span class="icon">▣</span>Question Bank</a>
+          <a class="nav-item" href="/admin-grading.html"><span class="icon">✓</span>Grading</a>
+          <a class="nav-item" href="/admin-results.html"><span class="icon">▤</span>Results</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">People</button>
+          <a class="nav-item" href="/admin-students.html"><span class="icon">◌</span>Students</a>
+          <a class="nav-item" href="/admin-users.html"><span class="icon">◍</span>Users</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Administration</button>
+          <a class="nav-item" href="/admin-staff-accounts.html"><span class="icon">◐</span>Admin & Staff Accounts</a>
+          <a class="nav-item" href="/admin-create-account.html"><span class="icon">＋</span>Create Account</a>
+          <a class="nav-item" href="/admin-account-activity.html"><span class="icon">◔</span>Account Activity</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Commerce</button>
+          <a class="nav-item" href="/admin-payments.html"><span class="icon">◫</span>Payments</a>
+          <a class="nav-item" href="/admin-premium.html"><span class="icon">✦</span>Premium</a>
+          <a class="nav-item active" href="/admin-wallet.html"><span class="icon">◧</span>Wallet</a>
+          <a class="nav-item" href="/admin-referral.html"><span class="icon">⟲</span>Referral</a>
+        </nav>
+
+        <div class="sidebar-footer">Authorization is enforced by the backend.</div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="role-select">Admin · Manager ▾</div>
+          <div class="user-badge">
+            <span class="user-avatar">AB</span>
+            <span>ama.boaten@uptorps.com</span>
+            <span>AB</span>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="page-top-actions">
+            <div class="title-wrap">
+              <h1 class="page-title">Wallet</h1>
+              <p class="page-subtitle">Ledger mirror. Balances are computed by the backend and never mutated here.</p>
+            </div>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span>Total Balance</span>
+                <span class="summary-card-icon soft">◫</span>
+              </div>
+              <div class="summary-card-value">GHS 18,240</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span>Credits</span>
+                <span class="summary-card-icon success">▣</span>
+              </div>
+              <div class="summary-card-value">GHS 714</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span>Debits</span>
+                <span class="summary-card-icon info">↗</span>
+              </div>
+              <div class="summary-card-value">GHS 772</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span>Pending Payouts</span>
+                <span class="summary-card-icon warning">◔</span>
+              </div>
+              <div class="summary-card-value">3</div>
+            </div>
+          </div>
+
+          <div class="content-card" style="margin-top: 24px;">
+            <div class="data-header">
+              <h3>Ledger entries</h3>
+            </div>
+            <table class="table table-compact">
+              <thead>
+                <tr>
+                  <th>Owner</th>
+                  <th>Type</th>
+                  <th>Reason</th>
+                  <th>Amount</th>
+                  <th>Balance after</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Kojo Asante</td>
+                  <td><span class="role-badge">Credit</span></td>
+                  <td>Referral reward</td>
+                  <td>GHS 10</td>
+                  <td>GHS 40</td>
+                  <td><span class="status-pill pending">Pending</span></td>
+                  <td>2026-07-02</td>
+                </tr>
+                <tr>
+                  <td>Akosua Darko</td>
+                  <td><span class="role-badge">Debit</span></td>
+                  <td>Quiz purchase</td>
+                  <td>GHS 27</td>
+                  <td>GHS 63</td>
+                  <td><span class="status-pill success">Completed</span></td>
+                  <td>2026-07-03</td>
+                </tr>
+                <tr>
+                  <td>Kojo Asante</td>
+                  <td><span class="role-badge">Credit</span></td>
+                  <td>Refund</td>
+                  <td>GHS 44</td>
+                  <td>GHS 86</td>
+                  <td><span class="status-pill success">Completed</span></td>
+                  <td>2026-07-04</td>
+                </tr>
+                <tr>
+                  <td>Akosua Darko</td>
+                  <td><span class="role-badge">Debit</span></td>
+                  <td>Payout</td>
+                  <td>GHS 61</td>
+                  <td>GHS 109</td>
+                  <td><span class="status-pill success">Completed</span></td>
+                  <td>2026-07-05</td>
+                </tr>
+                <tr>
+                  <td>Kojo Asante</td>
+                  <td><span class="role-badge">Credit</span></td>
+                  <td>Referral reward</td>
+                  <td>GHS 78</td>
+                  <td>GHS 132</td>
+                  <td><span class="status-pill success">Completed</span></td>
+                  <td>2026-07-06</td>
+                </tr>
+                <tr>
+                  <td>Akosua Darko</td>
+                  <td><span class="role-badge">Debit</span></td>
+                  <td>Quiz purchase</td>
+                  <td>GHS 95</td>
+                  <td>GHS 155</td>
+                  <td><span class="status-pill success">Completed</span></td>
+                  <td>2026-07-07</td>
+                </tr>
+                <tr>
+                  <td>Kojo Asante</td>
+                  <td><span class="role-badge">Credit</span></td>
+                  <td>Refund</td>
+                  <td>GHS 22</td>
+                  <td>GHS 178</td>
+                  <td><span class="status-pill success">Completed</span></td>
+                  <td>2026-07-08</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

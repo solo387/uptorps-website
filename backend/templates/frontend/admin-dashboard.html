@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/css/admin.css" />
+    <script src="/static/js/admin.js" defer></script>
+    <script>
+      (function () {
+        const role = localStorage.getItem('uptorps_role');
+        const loggedIn = localStorage.getItem('uptorps_logged_in') === 'true';
+        if (!loggedIn || role !== 'admin') {
+          window.location.href = '/login.html?portal=admin';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-mark">◈</div>
+          <div class="brand-name">
+            <span>Uptorps</span>
+            <span class="brand-small">Management Portal</span>
+          </div>
+        </div>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Overview</button>
+          <a class="nav-item active" href="/admin-dashboard.html"><span class="icon">▣</span>Dashboard</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Learning</button>
+          <a class="nav-item" href="/admin-learning.html"><span class="icon">▤</span>Learning Management</a>
+          <a class="nav-item" href="/admin-quizzes.html"><span class="icon">≋</span>Quizzes</a>
+          <a class="nav-item" href="/admin-question-bank.html"><span class="icon">▣</span>Question Bank</a>
+          <a class="nav-item" href="/admin-grading.html"><span class="icon">✓</span>Grading</a>
+          <a class="nav-item" href="/admin-results.html"><span class="icon">▤</span>Results</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">People</button>
+          <a class="nav-item" href="/admin-students.html"><span class="icon">◌</span>Students</a>
+          <a class="nav-item" href="/admin-users.html"><span class="icon">◍</span>Users</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Administration</button>
+          <a class="nav-item" href="/admin-staff-accounts.html"><span class="icon">◐</span>Admin & Staff Accounts</a>
+          <a class="nav-item" href="/admin-create-account.html"><span class="icon">＋</span>Create Account</a>
+          <a class="nav-item" href="/admin-account-activity.html"><span class="icon">◔</span>Account Activity</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Commerce</button>
+          <a class="nav-item" href="/admin-payments.html"><span class="icon">◫</span>Payments</a>
+          <a class="nav-item" href="/admin-premium.html"><span class="icon">✦</span>Premium</a>
+          <a class="nav-item" href="/admin-wallet.html"><span class="icon">◧</span>Wallet</a>
+          <a class="nav-item" href="/admin-referral.html"><span class="icon">⟲</span>Referral</a>
+        </nav>
+
+        <div class="sidebar-footer">
+          Authorization is enforced by the backend.
+        </div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="role-select">Admin · Manager ▾</div>
+          <div class="user-badge">
+            <span class="user-avatar">AB</span>
+            <span>ama.boaten@uptorps.com</span>
+            <span>AB</span>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="page-header">
+            <h1>Dashboard</h1>
+            <p>Operational overview scoped to the modules your account is authorized for.</p>
+          </div>
+
+          <div class="card-grid">
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Total Students</div>
+                <span class="icon-box soft">◌</span>
+              </div>
+              <div>
+                <div class="stat-value">4,820</div>
+                <div class="stat-sub">all registered learners</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Published Quizzes</div>
+                <span class="icon-box success">◍</span>
+              </div>
+              <div>
+                <div class="stat-value">268</div>
+                <div class="stat-sub">published</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Draft Quizzes</div>
+                <span class="icon-box soft">◫</span>
+              </div>
+              <div>
+                <div class="stat-value">144</div>
+                <div class="stat-sub">awaiting validation</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Quiz Attempts</div>
+                <span class="icon-box info">◾</span>
+              </div>
+              <div>
+                <div class="stat-value">27,431</div>
+                <div class="stat-sub"></div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Completed Quizzes</div>
+                <span class="icon-box success">◌</span>
+              </div>
+              <div>
+                <div class="stat-value">24,980</div>
+                <div class="stat-sub"></div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Pending Grading</div>
+                <span class="icon-box warning">◫</span>
+              </div>
+              <div>
+                <div class="stat-value">137</div>
+                <div class="stat-sub"></div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Payment Transactions</div>
+                <span class="icon-box soft">▭</span>
+              </div>
+              <div>
+                <div class="stat-value">5,602</div>
+                <div class="stat-sub">last 30 days</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Referral Activity</div>
+                <span class="icon-box info">◯</span>
+              </div>
+              <div>
+                <div class="stat-value">743</div>
+                <div class="stat-sub">credits & payouts</div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-card-header">
+                <div class="stat-card-title">Wallet Activity</div>
+                <span class="icon-box soft">◫</span>
+              </div>
+              <div>
+                <div class="stat-value">1,289</div>
+                <div class="stat-sub">credits & payouts</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-row">
+            <div class="panel">
+              <h3 class="panel-title">Session context</h3>
+              <table class="session-table">
+                <tbody>
+                  <tr><th>Role</th><td>ADMIN</td></tr>
+                  <tr><th>admin_type</th><td>MANAGER</td></tr>
+                  <tr><th>dev_specialization</th><td>—</td></tr>
+                  <tr><th>Resolved identity</th><td>ADMIN · MANAGER</td></tr>
+                  <tr><th>Granted permissions</th><td>17</td></tr>
+                  <tr><th>Visible metrics</th><td>12 of 12</td></tr>
+                </tbody>
+              </table>
+              <p class="empty-note" style="margin-top:16px;">Navigation, metrics and actions are derived from backend-granted permissions. Every protected screen re-checks authorization before rendering data.</p>
+            </div>
+
+            <div class="panel">
+              <h3 class="panel-title">Developer access</h3>
+              <div class="empty-note" style="margin-top: 12px;">This account is not an authorized developer, so no technical data is exposed.</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

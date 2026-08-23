@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users</title>
+    <link rel="stylesheet" href="/static/css/admin.css" />
+    <script src="/static/js/admin.js" defer></script>
+    <script>
+      (function () {
+        const role = localStorage.getItem('uptorps_role');
+        const loggedIn = localStorage.getItem('uptorps_logged_in') === 'true';
+        if (!loggedIn || role !== 'admin') {
+          window.location.href = '/login.html?portal=admin';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="logo-mark">◈</div>
+          <div class="brand-name">
+            <span>Uptorps</span>
+            <span class="brand-small">Management Portal</span>
+          </div>
+        </div>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Overview</button>
+          <a class="nav-item" href="/admin-dashboard.html"><span class="icon">▣</span>Dashboard</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Learning</button>
+          <a class="nav-item" href="/admin-learning.html"><span class="icon">▤</span>Learning Management</a>
+          <a class="nav-item" href="/admin-quizzes.html"><span class="icon">≋</span>Quizzes</a>
+          <a class="nav-item" href="/admin-question-bank.html"><span class="icon">▣</span>Question Bank</a>
+          <a class="nav-item" href="/admin-grading.html"><span class="icon">✓</span>Grading</a>
+          <a class="nav-item" href="/admin-results.html"><span class="icon">▤</span>Results</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">People</button>
+          <a class="nav-item" href="/admin-students.html"><span class="icon">◌</span>Students</a>
+          <a class="nav-item active" href="/admin-users.html"><span class="icon">◍</span>Users</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Administration</button>
+          <a class="nav-item" href="/admin-staff-accounts.html"><span class="icon">◐</span>Admin & Staff Accounts</a>
+          <a class="nav-item" href="/admin-create-account.html"><span class="icon">＋</span>Create Account</a>
+          <a class="nav-item" href="/admin-account-activity.html"><span class="icon">◔</span>Account Activity</a>
+        </nav>
+
+        <nav class="nav-group">
+          <button class="nav-item section-header">Commerce</button>
+          <a class="nav-item" href="/admin-payments.html"><span class="icon">◫</span>Payments</a>
+          <a class="nav-item" href="/admin-premium.html"><span class="icon">✦</span>Premium</a>
+          <a class="nav-item" href="/admin-wallet.html"><span class="icon">◧</span>Wallet</a>
+          <a class="nav-item" href="/admin-referral.html"><span class="icon">⟲</span>Referral</a>
+        </nav>
+
+        <div class="sidebar-footer">Authorization is enforced by the backend.</div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="role-select">Admin · Manager ▾</div>
+          <div class="user-badge">
+            <span class="user-avatar">AB</span>
+            <span>ama.boaten@uptorps.com</span>
+            <span>AB</span>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="page-top-actions">
+            <div class="title-wrap">
+              <h1 class="page-title">Users</h1>
+              <p class="page-subtitle">Portal accounts exactly as the backend defines them — role, admin type and specialization.</p>
+            </div>
+            <button class="page-cta">Admin & Staff Accounts</button>
+          </div>
+
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span>Portal Accounts</span>
+                <span class="summary-card-icon soft">◌</span>
+              </div>
+              <div class="summary-card-value">8</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span>Administrators</span>
+                <span class="summary-card-icon success">◌</span>
+              </div>
+              <div class="summary-card-value">4</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span>Developers</span>
+                <span class="summary-card-icon info">_</span>
+              </div>
+              <div class="summary-card-value">3</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-card-header">
+                <span>Suspended</span>
+                <span class="summary-card-icon warning">◐</span>
+              </div>
+              <div class="summary-card-value">1</div>
+            </div>
+          </div>
+
+          <div class="content-card" style="margin-top: 24px;">
+            <div class="data-header">
+              <h3>Account directory</h3>
+            </div>
+            <table class="table table-compact">
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Role</th>
+                  <th>Admin type</th>
+                  <th>Specialization</th>
+                  <th>Status</th>
+                  <th>Last login</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Ama Boateng<br /><span class="meta">ama.boateng@uptorps.io</span></td>
+                  <td><span class="role-badge">Admin</span></td>
+                  <td><span class="role-badge">Manager</span></td>
+                  <td>—</td>
+                  <td><span class="status-pill active">Active</span></td>
+                  <td>2026-08-02 08:14</td>
+                </tr>
+                <tr>
+                  <td>Kwesi Mensah<br /><span class="meta">kwesi.mensah@uptorps.io</span></td>
+                  <td><span class="role-badge">Admin</span></td>
+                  <td><span class="role-badge">Developer</span></td>
+                  <td>Frontend</td>
+                  <td><span class="status-pill active">Active</span></td>
+                  <td>2026-08-02 07:02</td>
+                </tr>
+                <tr>
+                  <td>Naa Lamptey<br /><span class="meta">naa.lamptey@uptorps.io</span></td>
+                  <td><span class="role-badge">Admin</span></td>
+                  <td><span class="role-badge">Developer</span></td>
+                  <td>Backend</td>
+                  <td><span class="status-pill active">Active</span></td>
+                  <td>2026-08-01 22:41</td>
+                </tr>
+                <tr>
+                  <td>Selorm Agbo<br /><span class="meta">selorm.agbo@uptorps.io</span></td>
+                  <td><span class="role-badge">Admin</span></td>
+                  <td><span class="role-badge">Developer</span></td>
+                  <td>Security</td>
+                  <td><span class="status-pill active">Active</span></td>
+                  <td>2026-08-01 19:08</td>
+                </tr>
+                <tr>
+                  <td>Yaw Antwi<br /><span class="meta">yaw.antwi@uptorps.io</span></td>
+                  <td><span class="role-badge">Teacher</span></td>
+                  <td>—</td>
+                  <td>—</td>
+                  <td><span class="status-pill active">Active</span></td>
+                  <td>2026-08-02 06:30</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

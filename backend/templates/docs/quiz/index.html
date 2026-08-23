@@ -1,0 +1,728 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quizzes API Documentation - Uptorps</title>
+    <link rel="stylesheet" href="{% static 'docs/styles.css' %}" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Top Navigation -->
+      <nav class="top-nav">
+        <div class="top-nav-content">
+          <a href="#" class="logo">
+            <span>📚</span>
+            <span>Uptorps API</span>
+          </a>
+          <div class="app-links">
+            <a href="{% url 'auth_docs' %}">Accounts</a>
+            <a href="{% url 'quiz_docs' %}" class="active">Quizzes</a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Left Sidebar Navigation -->
+        <aside class="sidebar">
+          <nav class="sidebar-nav">
+            <div class="sidebar-nav-header">📋 Endpoints</div>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+              <li><a href="#difficulty">Difficulty</a></li>
+              <li><a href="#level">Level</a></li>
+              <li><a href="#programme">Programme</a></li>
+              <li><a href="#course">Course</a></li>
+              <li><a href="#quiz">Quiz</a></li>
+              <li><a href="#question">Question</a></li>
+              <li><a href="#answer">Answer Option</a></li>
+              <li><a href="#attempt-start">Start Attempt</a></li>
+              <li><a href="#attempt-submit">Submit Attempt</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content">
+          <!-- Overview Section -->
+          <section id="overview" class="endpoint-card">
+            <div class="endpoint-header">
+              <h1 style="margin: 0">Quizzes API Documentation</h1>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Welcome to the Quizzes API</h3>
+                <p>
+                  This API provides CRUD operations for the hierarchical quiz
+                  data (difficulty, level, programme, course, quiz, questions,
+                  answers) plus endpoints for students to start and submit quiz
+                  attempts. Most write operations require admin privileges;
+                  retrieval endpoints are open to authenticated users.
+                </p>
+              </div>
+
+              <div class="section">
+                <div class="section-title">Base URL</div>
+                <div class="code-block">/api/quizzes</div>
+              </div>
+
+              <div class="section">
+                <div class="section-title">Hierarchy</div>
+                <ul style="margin-left: 20px; color: var(--text-gray)">
+                  <li>
+                    Difficulty → Level → Programme → Course → Quiz → Question →
+                    AnswerOption
+                  </li>
+                </ul>
+              </div>
+
+              <div class="alert info">
+                <div class="alert-title">ℹ️ Authorization</div>
+                <ul style="margin-left: 20px; margin-top: 10px">
+                  <li>Read endpoints (GET) require authentication only</li>
+                  <li>
+                    Create/update/delete require
+                    <code>is_admin</code> permission
+                  </li>
+                  <li>
+                    Starting and submitting attempts require the
+                    <code>CanAttemptQuiz</code> permission (e.g., student role)
+                  </li>
+                  <li>All requests and responses use JSON</li>
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Difficulty Section -->
+          <section id="difficulty" class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge get">GET</span>
+              <span class="method-badge post">POST</span>
+              <span class="method-badge patch">PUT</span>
+              <span class="method-badge delete">DELETE</span>
+              <div class="endpoint-path">
+                <h2>/difficulty/</h2>
+                <div class="url">/api/quizzes/difficulty/</div>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Manage Difficulty Levels</h3>
+                <p>
+                  You can list, create, update, or delete difficulty entries.
+                </p>
+                <span class="auth-badge required">GET: Authenticated</span>
+                <span class="auth-badge required">POST/PUT/DELETE: Admin</span>
+              </div>
+
+              <div class="section">
+                <div class="section-title">GET Query Parameters</div>
+                <p>None. Returns all difficulties.</p>
+              </div>
+              <div class="section">
+                <div class="section-title">POST Request Body</div>
+                <div class="params-table">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Type</th>
+                      <th>Required</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="param-name">name</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                      <td>Unique name</td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">description</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                      <td>Text description</td>
+                    </tr>
+                  </tbody>
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">PUT Request Body</div>
+                <p>
+                  Include <code>pk</code> of existing difficulty along with name
+                  and description.
+                </p>
+              </div>
+              <div class="section">
+                <div class="section-title">DELETE Query Parameters</div>
+                <p><code>?name=&lt;difficulty name&gt;</code></p>
+              </div>
+              <div class="section">
+                <div class="section-title">Responses</div>
+                <div>
+                  <span class="response-code success">200 OK</span> – for
+                  GET/PUT
+                  <span class="response-code success">201 Created</span> – for
+                  POST
+                  <span class="response-code success">204 No Content</span> –
+                  for DELETE
+                  <span class="response-code error">400 Bad Request</span> –
+                  invalid data
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">Example cURL</div>
+                <div class="code-block">
+                  curl -X POST https://api.uptorps.com/api/quizzes/difficulty/ \
+                  -H "Authorization: Bearer &lt;token&gt;" \ -H "Content-Type:
+                  application/json" \ -d '{"name":"Beginner","description":"Easy
+                  quizzes"}'
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">Example React (Fetch)</div>
+                <div class="code-block">
+                  await fetch('/api/quizzes/difficulty/', { method: 'POST',
+                  headers: { 'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}` }, body: JSON.stringify({
+                  name:'Beginner', description:'Easy quizzes' }) });
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Level Section -->
+          <section id="level" class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge get">GET</span>
+              <span class="method-badge post">POST</span>
+              <span class="method-badge patch">PUT</span>
+              <span class="method-badge delete">DELETE</span>
+              <div class="endpoint-path">
+                <h2>/level/</h2>
+                <div class="url">/api/quizzes/level/</div>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Manage Levels</h3>
+                <p>
+                  Levels belong to difficulties. You must specify the difficulty
+                  when querying or creating.
+                </p>
+                <span class="auth-badge required">GET: Authenticated</span>
+                <span class="auth-badge required">POST/PUT/DELETE: Admin</span>
+              </div>
+              <div class="section">
+                <div class="section-title">GET Query Parameters</div>
+                <table class="params-table">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="param-name">difficulty</span></td>
+                      <td>Name of difficulty (required)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="section">
+                <div class="section-title">POST Body</div>
+                <div class="params-table">
+                  <thead>
+                    <tr>
+                      <th>Parameter</th>
+                      <th>Type</th>
+                      <th>Required</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="param-name">name</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">difficulty</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                  </tbody>
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">PUT Body</div>
+                <p>
+                  Include <code>pk</code> plus updated name/difficulty (if
+                  changed).
+                </p>
+              </div>
+              <div class="section">
+                <div class="section-title">DELETE Query Params</div>
+                <p>
+                  <code>?difficulty=&lt;name&gt;</code> deletes all levels under
+                  that difficulty.
+                </p>
+              </div>
+
+              <div class="section">
+                <div class="section-title">Example React</div>
+                <div class="code-block">
+                  // fetch levels for a difficulty const res = await
+                  fetch(`/api/quizzes/level/?difficulty=Beginner`, { headers: {
+                  Authorization: `Bearer ${token}` } }); const data = await
+                  res.json();
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Programme Section -->
+          <section id="programme" class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge get">GET</span>
+              <span class="method-badge post">POST</span>
+              <span class="method-badge patch">PUT</span>
+              <span class="method-badge delete">DELETE</span>
+              <div class="endpoint-path">
+                <h2>/programme/</h2>
+                <div class="url">/api/quizzes/programme/</div>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Manage Programmes</h3>
+                <p>
+                  Programmes live under levels and difficulties. Querying
+                  requires both parameters.
+                </p>
+                <span class="auth-badge required">GET: Authenticated</span>
+                <span class="auth-badge required">POST/PUT/DELETE: Admin</span>
+              </div>
+              <div class="section">
+                <div class="section-title">GET Query Params</div>
+                <table class="params-table">
+                  <thead>
+                    <tr>
+                      <th>Param</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="param-name">difficulty</span></td>
+                      <td>Required</td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">level</span></td>
+                      <td>Required</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="section">
+                <div class="section-title">POST Body</div>
+                <div class="params-table">
+                  <thead>
+                    <tr>
+                      <th>Param</th>
+                      <th>Type</th>
+                      <th>Req?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="param-name">name</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">level</span></td>
+                      <td>string (level name)</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">difficulty</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                  </tbody>
+                </div>
+              </div>
+
+              <div class="section">
+                <div class="section-title">DELETE Query Params</div>
+                <p>
+                  <code
+                    >?difficulty=&lt;>&amp;level=&lt;>&amp;programme=&lt;</code
+                  >
+                  deletes specific programme.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Course Section -->
+          <section id="course" class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge get">GET</span>
+              <span class="method-badge post">POST</span>
+              <span class="method-badge patch">PUT</span>
+              <span class="method-badge delete">DELETE</span>
+              <div class="endpoint-path">
+                <h2>/course/</h2>
+                <div class="url">/api/quizzes/course/</div>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Manage Courses</h3>
+                <p>
+                  Courses are tied to a programme (and transitively to
+                  level/difficulty). Creation requires authenticated user to
+                  supply course metadata.
+                </p>
+                <span class="auth-badge required">GET: Authenticated</span>
+                <span class="auth-badge required">POST/PUT/DELETE: Admin</span>
+              </div>
+              <div class="section">
+                <div class="section-title">GET Query Params</div>
+                <ul style="margin-left: 20px">
+                  <li><code>difficulty</code> (required)</li>
+                  <li><code>level</code> (required)</li>
+                  <li><code>programme</code> (required)</li>
+                </ul>
+              </div>
+              <div class="section">
+                <div class="section-title">POST Body</div>
+                <div class="params-table">
+                  <thead>
+                    <tr>
+                      <th>Param</th>
+                      <th>Type</th>
+                      <th>Req?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="param-name">name</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">programme</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">level</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">difficulty</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                  </tbody>
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">DELETE Query Params</div>
+                <code
+                  >?difficulty=&lt;>&amp;level=&lt;>&amp;programme=&lt;>&amp;course=&lt;</code
+                >
+              </div>
+            </div>
+          </section>
+
+          <!-- Quiz Section -->
+          <section id="quiz" class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge get">GET</span>
+              <span class="method-badge post">POST</span>
+              <span class="method-badge patch">PUT</span>
+              <span class="method-badge delete">DELETE</span>
+              <div class="endpoint-path">
+                <h2>/quiz/</h2>
+                <div class="url">/api/quizzes/quiz/</div>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Manage Quizzes</h3>
+                <p>
+                  Quizzes belong to a course; retrieving requires
+                  difficulty/level/programme/course in query parameters.
+                  Creation uses multipart POST form fields for relational
+                  lookup.
+                </p>
+                <span class="auth-badge required">GET: Authenticated</span>
+                <span class="auth-badge required">POST/PUT/DELETE: Admin</span>
+              </div>
+              <div class="section">
+                <div class="section-title">GET Query Params</div>
+                <ul style="margin-left: 20px">
+                  <li>difficulty</li>
+                  <li>level</li>
+                  <li>programme</li>
+                  <li>course</li>
+                </ul>
+              </div>
+              <div class="section">
+                <div class="section-title">POST Form Fields</div>
+                <ul style="margin-left: 20px">
+                  <li>title (string)</li>
+                  <li>description (string)</li>
+                  <li>is_paid (boolean)</li>
+                  <li>duration_minutes (integer)</li>
+                  <li>
+                    difficulty, level, programme, course (to identify parent)
+                  </li>
+                </ul>
+              </div>
+              <div class="section">
+                <div class="section-title">DELETE Query Param</div>
+                <p><code>?quiz_id=&lt;uuid&gt;</code></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Question Section -->
+          <section id="question" class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge get">GET</span>
+              <span class="method-badge post">POST</span>
+              <span class="method-badge patch">PUT</span>
+              <span class="method-badge delete">DELETE</span>
+              <div class="endpoint-path">
+                <h2>/question/</h2>
+                <div class="url">/api/quizzes/question/</div>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Quiz Questions</h3>
+                <p>Add, update, list or remove questions attached to a quiz.</p>
+                <span class="auth-badge required">Admin</span>
+              </div>
+              <div class="section">
+                <div class="section-title">GET Query Param</div>
+                <p><code>?quiz_uuid=&lt;uuid&gt;</code></p>
+              </div>
+              <div class="section">
+                <div class="section-title">POST Body</div>
+                <table class="params-table">
+                  <thead>
+                    <tr>
+                      <th>Param</th>
+                      <th>Type</th>
+                      <th>Req?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="param-name">text</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">question_type</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">quiz_uuid</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="section">
+                <div class="section-title">DELETE Query Param</div>
+                <p><code>?question_uuid=&lt;uuid&gt;</code></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Answer Section -->
+          <section id="answer" class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge get">GET</span>
+              <span class="method-badge post">POST</span>
+              <span class="method-badge patch">PUT</span>
+              <span class="method-badge delete">DELETE</span>
+              <div class="endpoint-path">
+                <h2>/answer/</h2>
+                <div class="url">/api/quizzes/answer/</div>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Answer Options</h3>
+                <p>Manage answer options tied to a specific question.</p>
+                <span class="auth-badge required">Admin</span>
+              </div>
+              <div class="section">
+                <div class="section-title">GET Query Param</div>
+                <p><code>?question_uuid=&lt;uuid&gt;</code></p>
+              </div>
+              <div class="section">
+                <div class="section-title">POST Body</div>
+                <table class="params-table">
+                  <thead>
+                    <tr>
+                      <th>Param</th>
+                      <th>Type</th>
+                      <th>Req?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><span class="param-name">text</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">is_correct</span></td>
+                      <td>boolean</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="param-name">question_uuid</span></td>
+                      <td>string</td>
+                      <td><span class="required-badge">REQUIRED</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="section">
+                <div class="section-title">DELETE Query Param</div>
+                <p><code>?answer_uuid=&lt;uuid&gt;</code></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Start Attempt Section -->
+          <section id="attempt-start" class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge post">POST</span>
+              <span class="method-badge delete">DELETE</span>
+              <div class="endpoint-path">
+                <h2>/attempt/start/&lt;quiz_id&gt;/</h2>
+                <div class="url">
+                  /api/quizzes/attempt/start/&lt;uuid:quiz_id&gt;/
+                </div>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Begin a Quiz Attempt</h3>
+                <p>
+                  Creates or retrieves an existing attempt object for the
+                  authenticated user. Returns quiz structure and attempt ID.
+                  Required permission <code>CanAttemptQuiz</code>.
+                </p>
+                <span class="auth-badge required">Authenticated</span>
+              </div>
+              <div class="section">
+                <div class="section-title">Response Format</div>
+                <div class="code-block">
+                  { "attempt_id": 12, "quiz": { "uuid": "...", "title": "Sample
+                  Quiz", "questions": [ ... ] } }
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">Example React</div>
+                <div class="code-block">
+                  const res = await
+                  fetch(`/api/quizzes/attempt/start/${quizId}/`, { method:
+                  'POST', headers: { Authorization: `Bearer ${token}` } });
+                  const data = await res.json();
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Submit Attempt Section -->
+          <section id="attempt-submit" class="endpoint-card">
+            <div class="endpoint-header">
+              <span class="method-badge post">POST</span>
+              <div class="endpoint-path">
+                <h2>/attempt/submit/</h2>
+                <div class="url">/api/quizzes/attempt/submit/</div>
+              </div>
+            </div>
+            <div class="endpoint-body">
+              <div class="endpoint-description">
+                <h3>Submit Quiz Answers</h3>
+                <p>
+                  Send user's answers for grading. The server calculates score,
+                  percentage, and marks attempt completed. Requires
+                  <code>CanAttemptQuiz</code>.
+                </p>
+                <span class="auth-badge required">Authenticated</span>
+              </div>
+              <div class="section">
+                <div class="section-title">Request Body</div>
+                <div class="code-block">
+                  { "attempt_id": "uuid-or-int", "answers": [ {"question_id":
+                  "uuid", "selected_options": ["uuid1","uuid2"]}, ... ] }
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">Example React</div>
+                <div class="code-block">
+                  await fetch('/api/quizzes/attempt/submit/', { method: 'POST',
+                  headers: { 'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}` }, body: JSON.stringify({
+                  attempt_id: attemptId, answers: userAnswers }) });
+                </div>
+              </div>
+              <div class="section">
+                <div class="section-title">Example Response</div>
+                <div class="code-block">
+                  { "score": 8, "total": 10, "percentage": 80.0 }
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Closing Note -->
+          <section class="endpoint-card" style="margin-top: 40px">
+            <div class="endpoint-header"><h2>Notes</h2></div>
+            <div class="endpoint-body">
+              <ul style="margin-left: 20px; color: var(--text-gray)">
+                <li>
+                  All write operations require admin; student UI should hide
+                  these links.
+                </li>
+                <li>
+                  Quiz duration (in minutes) is stored on the quiz model but
+                  timing enforcement happens on frontend or later backend
+                  checks.
+                </li>
+                <li>
+                  The <code>CanAttemptQuiz</code> permission may check course
+                  enrollment or other business rules.
+                </li>
+                <li>
+                  Delete routes are destructive; consider soft-delete in future.
+                </li>
+              </ul>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+    <script src="{% static 'docs/script.js' %}"></script>
+  </body>
+</html>
