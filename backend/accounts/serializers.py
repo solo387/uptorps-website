@@ -1,6 +1,6 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from audits.signals import failed_admin_login, success_admin_login
-from .emails import send_admin_lockout_email, send_verify_email
+from .emails import send_admin_lockout_email, send_verify_email, queue_or_send
 from rest_framework.exceptions import AuthenticationFailed
 from .utils import generate_email_verification_token
 from django.contrib.auth import authenticate
@@ -81,7 +81,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         #     node.save(update_fields=["root_node"])
         token = generate_email_verification_token(user)
         verify_url = f"{settings.HOST_DOMAIN_URL}/verify-email?token={token}"
-        send_verify_email.delay(f'{user.uuid}', verify_url)
+        queue_or_send(send_verify_email, f'{user.uuid}', verify_url)
         return user
 
 
@@ -245,7 +245,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
                     ip = request.META.get("REMOTE_ADDR", "Unknown")
                     agent = request.META.get("HTTP_USER_AGENT", "Unknown")
-                    send_admin_lockout_email.delay(
+                    queue_or_send(
+                        send_admin_lockout_email,
                         str(user_obj.uuid),
                         LOCKOUT_MINUTES,
                         ip,

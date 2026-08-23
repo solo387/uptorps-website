@@ -14,8 +14,14 @@ load_dotenv(BASE_DIR / ".env")
 
 DEBUG = str(os.getenv("DEBUG", "True")).lower() == "true"
 SECRET_KEY = os.getenv("SECRET_KEY") or ("dev-secret-for-local" if DEBUG else None)
-ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if host.strip()]
-HOST_DOMAIN_URL = os.getenv("HOST")
+DEFAULT_ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
+USER_ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv("ALLOWED_HOSTS", "").split(",")
+    if host.strip()
+]
+ALLOWED_HOSTS = list(dict.fromkeys(DEFAULT_ALLOWED_HOSTS + USER_ALLOWED_HOSTS))
+HOST_DOMAIN_URL = os.getenv("HOST") or "http://127.0.0.1:8000"
 
 if not SECRET_KEY:
     raise ValueError("SECRET_KEY is not set!")
@@ -193,17 +199,19 @@ STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
-    BASE_DIR.parent / "frontend" / "static",
     BASE_DIR / "static",
 ]
 
 
 # Email Config
-EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
+EMAIL_BACKEND = os.getenv(
+    "EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+)
 
 EMAIL_HOST = os.getenv("EMAIL_HOST")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS") == "True"
+EMAIL_USE_TLS = str(os.getenv("EMAIL_USE_TLS", "True")).lower() == "true"
 
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")

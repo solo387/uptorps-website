@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from rest_framework.views import APIView
-from rest_framework.generics import RetrieveAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -25,7 +25,7 @@ from .permissions import IsAdmin, IsBackendDev, IsSelfOrAdmin
 from .models import User
 from .throttles import RoleBasedLoginThrottle, ResendVerificationThrottle, PasswordResetThrottle
 from .utils import verify_email_token, generate_email_verification_token, generate_password_reset_token, verify_password_reset_token
-from .emails import send_verify_email, send_password_reset_email
+from .emails import send_verify_email, send_password_reset_email, queue_or_send
 
 ###################
 # Audit components#
@@ -133,7 +133,7 @@ class ResendVerificationEmailView(APIView):
 
         token = generate_email_verification_token(user)
         verify_url = f"{settings.HOST_DOMAIN_URL}/verify-email/?token={token}"
-        send_verify_email.delay(f'{user.uuid}', verify_url)
+        queue_or_send(send_verify_email, f'{user.uuid}', verify_url)
 
         return Response(
             {"detail": "If the email exists, a verification link was sent."},
@@ -197,7 +197,7 @@ class PasswordResetRequestView(APIView):
             reset_url = f"{settings.HOST_DOMAIN_URL}/reset-password/?token={token}"
             duration = settings.TOKEN_VERIFICATION_DURATION
 
-            send_password_reset_email.delay(f'{user.uuid}', reset_url, duration)
+            queue_or_send(send_password_reset_email, f'{user.uuid}', reset_url, duration)
 
         return Response(
             {"detail": "If the email exists, a reset link was sent."},
@@ -236,6 +236,12 @@ class PasswordResetConfirmView(APIView):
             {"detail": "Password reset successful"},
             status=status.HTTP_200_OK,
         )
+
+class UserListView(ListAPIView):
+    queryset = User.objects.all().order_by("-date_joined")
+    serializer_class = UserDetailSerializer
+    permission_classes = [IsAuthenticated, IsAdmin]
+
 
 # Getting user info
 # class UserDetailView(RetrieveAPIView):

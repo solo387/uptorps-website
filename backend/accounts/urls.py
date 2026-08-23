@@ -9,6 +9,7 @@ from .views import (
     ResendVerificationEmailView,
     PasswordResetRequestView,
     PasswordResetConfirmView,
+    UserListView,
     # UserDetailView,
     UserDetailUpdateView
 )
@@ -27,6 +28,7 @@ urlpatterns = [
     # path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("refresh/", CustomTokenRefreshView.as_view(), name="token_refresh"),
     path("create-admin/", CreateAdminView.as_view()), #Docs not written
+    path("users/", UserListView.as_view(), name="user-list"),
     path("users/<uuid:uuid>/delete/", DeleteUserView.as_view()), #Docs not written
     path("password-reset/", PasswordResetRequestView.as_view()),
     path("password-reset/confirm/", PasswordResetConfirmView.as_view()),
