@@ -27,6 +27,18 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = str(os.getenv("SESSION_COOKIE_SECURE", "False")).lower() == "true"
     CSRF_COOKIE_SECURE = str(os.getenv("CSRF_COOKIE_SECURE", "False")).lower() == "true"
     SECURE_SSL_REDIRECT = str(os.getenv("SECURE_SSL_REDIRECT", "False")).lower() == "true"
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+csrf_trusted_origins = [
+    origin.strip()
+    for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+    if origin.strip()
+]
+if HOST_DOMAIN_URL:
+    csrf_trusted_origins.append(HOST_DOMAIN_URL.rstrip("/"))
+if "localhost" not in csrf_trusted_origins:
+    csrf_trusted_origins.extend(["http://localhost:8000", "https://localhost:8000"])
+CSRF_TRUSTED_ORIGINS = list(dict.fromkeys(csrf_trusted_origins))
 
 
 # Application definition
@@ -55,6 +67,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -198,6 +211,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 # Email Config
