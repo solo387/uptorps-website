@@ -6,9 +6,6 @@ const STORAGE_KEYS = {
   accounts: 'uptorps_accounts',
 };
 
-const DEFAULT_ADMIN_EMAIL = 'admin@uptorps.com';
-const DEFAULT_ADMIN_PASSWORD = 'Admin@123';
-
 const getAccounts = () => {
   try {
     const rawValue = localStorage.getItem(STORAGE_KEYS.accounts);
@@ -22,22 +19,6 @@ const getAccounts = () => {
 
 const saveAccounts = (accounts) => {
   localStorage.setItem(STORAGE_KEYS.accounts, JSON.stringify(accounts));
-};
-
-const seedDefaultAdminAccount = () => {
-  const accounts = getAccounts();
-  const adminEmail = normalizeEmail(DEFAULT_ADMIN_EMAIL);
-
-  if (!accounts[adminEmail]) {
-    accounts[adminEmail] = {
-      email: adminEmail,
-      password: DEFAULT_ADMIN_PASSWORD,
-      role: 'admin',
-      name: 'System Administrator',
-      createdBy: 'system'
-    };
-    saveAccounts(accounts);
-  }
 };
 
 const getAccountByEmail = (email) => {
@@ -78,7 +59,7 @@ const normalizeEmail = (value) => (value || '').trim().toLowerCase();
 
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-const getCurrentUser = () => localStorage.getItem(STORAGE_KEYS.user) || 'student@uptorps.com';
+const getCurrentUser = () => localStorage.getItem(STORAGE_KEYS.user) || '';
 const getCurrentRole = () => localStorage.getItem(STORAGE_KEYS.role) || 'student';
 const isAdminRoute = () => window.location.pathname.includes('admin-');
 const getRequestedPortal = () => {
@@ -90,6 +71,7 @@ const clearAuthState = () => {
   localStorage.removeItem('uptorps_logged_in');
   localStorage.removeItem(STORAGE_KEYS.user);
   localStorage.removeItem(STORAGE_KEYS.role);
+  localStorage.removeItem(STORAGE_KEYS.accounts);
   localStorage.removeItem('uptorps_access_token');
   localStorage.removeItem('uptorps_refresh_token');
 };
@@ -160,7 +142,7 @@ const ensureAuthState = () => {
 
 const setCurrentUser = (email, role = 'student') => {
   const normalized = normalizeEmail(email);
-  localStorage.setItem(STORAGE_KEYS.user, normalized || 'student@uptorps.com');
+  localStorage.setItem(STORAGE_KEYS.user, normalized || '');
   localStorage.setItem(STORAGE_KEYS.role, role === 'admin' ? 'admin' : 'student');
   localStorage.setItem('uptorps_logged_in', 'true');
 };
@@ -168,6 +150,7 @@ const setCurrentUser = (email, role = 'student') => {
 const logoutUser = () => {
   clearAuthState();
   localStorage.removeItem(STORAGE_KEYS.remember);
+  localStorage.removeItem(STORAGE_KEYS.accounts);
   window.location.href = './login.html';
 };
 
@@ -198,12 +181,12 @@ const setupDashboardUser = () => {
   const email = getCurrentUser();
   const emailNode = document.getElementById('user-email');
   if (emailNode) {
-    emailNode.textContent = email;
+    emailNode.textContent = email || 'Guest';
   }
 
   const greetingNode = document.getElementById('user-greeting');
   if (greetingNode) {
-    const username = email.split('@')[0] || 'Learner';
+    const username = email ? email.split('@')[0] : 'Guest';
     greetingNode.textContent = `${username} 👋`;
   }
 };
@@ -211,9 +194,14 @@ const setupDashboardUser = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
 
-    clearAuthState();
-
     const form = event.currentTarget;
+    if (form.dataset.submitting === 'true') {
+      return;
+    }
+
+    clearAuthState();
+    form.dataset.submitting = 'true';
+
     const email = normalizeEmail(form.email.value);
     const password = form.password.value;
     const selectedPortalField = form.querySelector('input[name="portal"]:checked');
@@ -221,11 +209,13 @@ const setupDashboardUser = () => {
 
     if (!isValidEmail(email)) {
       setMessage('Please enter a valid email address.', 'error');
+      form.dataset.submitting = 'false';
       return;
     }
 
     if (!password || password.length < 6) {
       setMessage('Password must be at least 6 characters.', 'error');
+      form.dataset.submitting = 'false';
       return;
     }
 
@@ -241,6 +231,9 @@ const setupDashboardUser = () => {
       if (!userUuid) {
         throw new Error('Login did not return a valid user ID.');
       }
+
+      localStorage.setItem('uptorps_access_token', loginResponse.access);
+      localStorage.setItem('uptorps_refresh_token', loginResponse.refresh);
 
       const profileResponse = await fetchJson(`/api/accounts/users/info/${userUuid}/`);
       const role = String(profileResponse.role || '').toUpperCase();
@@ -268,27 +261,9 @@ const setupDashboardUser = () => {
 
       window.location.href = selectedPortal === 'admin' ? './admin-dashboard.html' : './dashboard.html';
     } catch (error) {
-      const fallbackAccount = getAccountByEmail(email);
-      if (fallbackAccount && fallbackAccount.password === password) {
-        if (selectedPortal === 'admin' && !isAdminRole(fallbackAccount.role)) {
-          setMessage('This email is not registered for the admin portal.', 'error');
-          return;
-        }
-        if (selectedPortal === 'student' && !['student'].includes(String(fallbackAccount.role || '').toLowerCase())) {
-          setMessage('This email is registered for the admin portal. Please choose Admin to continue.', 'error');
-          return;
-        }
-        setCurrentUser(email, selectedPortal);
-        if (form.remember && form.remember.checked) {
-          localStorage.setItem(STORAGE_KEYS.remember, 'true');
-        } else {
-          localStorage.removeItem(STORAGE_KEYS.remember);
-        }
-        window.location.href = selectedPortal === 'admin' ? './admin-dashboard.html' : './dashboard.html';
-        return;
-      }
-
       setMessage(error.message || 'Unable to sign in. Please check your details and try again.', 'error');
+    } finally {
+      form.dataset.submitting = 'false';
     }
   };
 
@@ -315,7 +290,6 @@ const handleSignup = (event) => {
     return;
   }
 
-  seedDefaultAdminAccount();
   const existingAccount = getAccountByEmail(email);
   if (existingAccount && isAdminRole(existingAccount.role)) {
     setMessage('Admin accounts can only be created by an existing admin account. Students can create student accounts only.', 'error');

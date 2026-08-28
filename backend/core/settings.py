@@ -13,7 +13,7 @@ load_dotenv(BASE_DIR / ".env")
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 DEBUG = str(os.getenv("DEBUG", "True")).lower() == "true"
-SECRET_KEY = os.getenv("SECRET_KEY") or ("dev-secret-for-local" if DEBUG else None)
+SECRET_KEY = os.getenv("SECRET_KEY") or "dev-secret-for-local"
 DEFAULT_ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
 USER_ALLOWED_HOSTS = [
     host.strip()
@@ -23,13 +23,10 @@ USER_ALLOWED_HOSTS = [
 ALLOWED_HOSTS = list(dict.fromkeys(DEFAULT_ALLOWED_HOSTS + USER_ALLOWED_HOSTS))
 HOST_DOMAIN_URL = os.getenv("HOST") or "http://127.0.0.1:8000"
 
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY is not set!")
-
 if not DEBUG:
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = str(os.getenv("SESSION_COOKIE_SECURE", "False")).lower() == "true"
+    CSRF_COOKIE_SECURE = str(os.getenv("CSRF_COOKIE_SECURE", "False")).lower() == "true"
+    SECURE_SSL_REDIRECT = str(os.getenv("SECURE_SSL_REDIRECT", "False")).lower() == "true"
 
 
 # Application definition
@@ -206,12 +203,13 @@ STATICFILES_DIRS = [
 # Email Config
 EMAIL_BACKEND = os.getenv(
     "EMAIL_BACKEND",
-    "django.core.mail.backends.console.EmailBackend",
+    "django.core.mail.backends.smtp.EmailBackend",
 )
 
-EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.gmail.com")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
 EMAIL_USE_TLS = str(os.getenv("EMAIL_USE_TLS", "True")).lower() == "true"
+EMAIL_USE_SSL = str(os.getenv("EMAIL_USE_SSL", "False")).lower() == "true"
 
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
