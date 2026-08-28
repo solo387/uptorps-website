@@ -109,11 +109,12 @@ const setAuthState = (payload) => {
 };
 
 const fetchJson = async (url, options = {}) => {
-  const token = localStorage.getItem('uptorps_access_token');
+  const isLoginRequest = String(url).includes('/api/accounts/login/');
+  const token = isLoginRequest ? null : localStorage.getItem('uptorps_access_token');
   const headers = { 'Content-Type': 'application/json', ...(options.headers || {}) };
 
   if (token) {
-    headers.Authorization = `Bearer ${token}`;
+    headers.Authorization = "Bearer " + token;
   }
 
   const response = await fetch(url, { ...options, headers });
@@ -207,87 +208,89 @@ const setupDashboardUser = () => {
   }
 };
 
-const handleLogin = async (event) => {
-  event.preventDefault();
+  const handleLogin = async (event) => {
+    event.preventDefault();
 
-  const form = event.currentTarget;
-  const email = normalizeEmail(form.email.value);
-  const password = form.password.value;
-  const selectedPortalField = form.querySelector('input[name="portal"]:checked');
-  const selectedPortal = selectedPortalField ? selectedPortalField.value : getRequestedPortal();
+    clearAuthState();
 
-  if (!isValidEmail(email)) {
-    setMessage('Please enter a valid email address.', 'error');
-    return;
-  }
+    const form = event.currentTarget;
+    const email = normalizeEmail(form.email.value);
+    const password = form.password.value;
+    const selectedPortalField = form.querySelector('input[name="portal"]:checked');
+    const selectedPortal = selectedPortalField ? selectedPortalField.value : getRequestedPortal();
 
-  if (!password || password.length < 6) {
-    setMessage('Password must be at least 6 characters.', 'error');
-    return;
-  }
-
-  try {
-    const loginResponse = await fetchJson('/api/accounts/login/', {
-      method: 'POST',
-      body: JSON.stringify({ email, password })
-    });
-
-    const userMeta = loginResponse.user || {};
-    const userUuid = userMeta.uuid || (userMeta.user && userMeta.user.uuid);
-
-    if (!userUuid) {
-      throw new Error('Login did not return a valid user ID.');
+    if (!isValidEmail(email)) {
+      setMessage('Please enter a valid email address.', 'error');
+      return;
     }
 
-    const profileResponse = await fetchJson(`/api/accounts/users/info/${userUuid}/`);
-    const role = String(profileResponse.role || '').toUpperCase();
-
-    if (selectedPortal === 'admin' && role !== 'ADMIN') {
-      throw new Error('This account does not have admin access.');
+    if (!password || password.length < 6) {
+      setMessage('Password must be at least 6 characters.', 'error');
+      return;
     }
 
-    if (selectedPortal === 'student' && role === 'ADMIN') {
-      throw new Error('This is an admin account. Please choose Admin to continue.');
-    }
+    try {
+      const loginResponse = await fetchJson('/api/accounts/login/', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
 
-    setAuthState({
-      email: profileResponse.email || email,
-      role: role === 'ADMIN' ? 'admin' : 'student',
-      access: loginResponse.access,
-      refresh: loginResponse.refresh
-    });
+      const userMeta = loginResponse.user || {};
+      const userUuid = userMeta.uuid || (userMeta.user && userMeta.user.uuid);
 
-    if (form.remember && form.remember.checked) {
-      localStorage.setItem(STORAGE_KEYS.remember, 'true');
-    } else {
-      localStorage.removeItem(STORAGE_KEYS.remember);
-    }
-
-    window.location.href = selectedPortal === 'admin' ? './admin-dashboard.html' : './dashboard.html';
-  } catch (error) {
-    const fallbackAccount = getAccountByEmail(email);
-    if (fallbackAccount && fallbackAccount.password === password) {
-      if (selectedPortal === 'admin' && !isAdminRole(fallbackAccount.role)) {
-        setMessage('This email is not registered for the admin portal.', 'error');
-        return;
+      if (!userUuid) {
+        throw new Error('Login did not return a valid user ID.');
       }
-      if (selectedPortal === 'student' && !['student'].includes(String(fallbackAccount.role || '').toLowerCase())) {
-        setMessage('This email is registered for the admin portal. Please choose Admin to continue.', 'error');
-        return;
+
+      const profileResponse = await fetchJson(`/api/accounts/users/info/${userUuid}/`);
+      const role = String(profileResponse.role || '').toUpperCase();
+
+      if (selectedPortal === 'admin' && role !== 'ADMIN') {
+        throw new Error('This account does not have admin access.');
       }
-      setCurrentUser(email, selectedPortal);
+
+      if (selectedPortal === 'student' && role === 'ADMIN') {
+        throw new Error('This is an admin account. Please choose Admin to continue.');
+      }
+
+      setAuthState({
+        email: profileResponse.email || email,
+        role: role === 'ADMIN' ? 'admin' : 'student',
+        access: loginResponse.access,
+        refresh: loginResponse.refresh
+      });
+
       if (form.remember && form.remember.checked) {
         localStorage.setItem(STORAGE_KEYS.remember, 'true');
       } else {
         localStorage.removeItem(STORAGE_KEYS.remember);
       }
-      window.location.href = selectedPortal === 'admin' ? './admin-dashboard.html' : './dashboard.html';
-      return;
-    }
 
-    setMessage(error.message || 'Unable to sign in. Please check your details and try again.', 'error');
-  }
-};
+      window.location.href = selectedPortal === 'admin' ? './admin-dashboard.html' : './dashboard.html';
+    } catch (error) {
+      const fallbackAccount = getAccountByEmail(email);
+      if (fallbackAccount && fallbackAccount.password === password) {
+        if (selectedPortal === 'admin' && !isAdminRole(fallbackAccount.role)) {
+          setMessage('This email is not registered for the admin portal.', 'error');
+          return;
+        }
+        if (selectedPortal === 'student' && !['student'].includes(String(fallbackAccount.role || '').toLowerCase())) {
+          setMessage('This email is registered for the admin portal. Please choose Admin to continue.', 'error');
+          return;
+        }
+        setCurrentUser(email, selectedPortal);
+        if (form.remember && form.remember.checked) {
+          localStorage.setItem(STORAGE_KEYS.remember, 'true');
+        } else {
+          localStorage.removeItem(STORAGE_KEYS.remember);
+        }
+        window.location.href = selectedPortal === 'admin' ? './admin-dashboard.html' : './dashboard.html';
+        return;
+      }
+
+      setMessage(error.message || 'Unable to sign in. Please check your details and try again.', 'error');
+    }
+  };
 
 const handleSignup = (event) => {
   event.preventDefault();
